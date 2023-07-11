@@ -160,7 +160,6 @@ $(document).ready(function() {
 	
 	const findShop = function() { //매장 리스트 가져오기
 		var keyword = $("#exampleFormControlInput1").val();
-		console.log("검색어 : " + keyword);
 		var formData = new FormData();
 	    formData.append("keyword", keyword);
 		
@@ -176,9 +175,6 @@ $(document).ready(function() {
 	        contentType:false,
 	        dataType:'HTML',
 			success:function(data) {
-					console.log("검색어 전송 성공 : " + keyword);
-					console.log(data);
-				
 					$("#stay").empty();
 					$("#stay").html(data);
 			},
