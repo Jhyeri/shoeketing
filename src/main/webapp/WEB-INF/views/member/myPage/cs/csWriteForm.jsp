@@ -247,7 +247,6 @@ $(document).ready(function() {
 		        processData:false,
 		        contentType:false,
 				success:function(data) {
-						console.log("글 전송 성공 : " + formData);
 						alert("글을 등록하였습니다.");
 						location.href="/sk/myPage/csList";
 				},

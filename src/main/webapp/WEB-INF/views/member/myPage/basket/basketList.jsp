@@ -27,7 +27,6 @@ function fn_chkDelete(num) { //상품 삭제 함수
 			alert("선택된 상품이 없습니다.");
 		} else {
 			if(confirm("상품을 장바구니에서 제거하시겠습니까?")) {
-				alert("번호 : " + goodsArr);
 				$.ajaxSettings.traditional = true;
 				$.ajax({
 				url:"/sk/basket/basketDelete",

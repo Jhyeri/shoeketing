@@ -94,7 +94,7 @@ $(document).ready(function() {
 	
 	$("a[name='title']").on("click", function(e) { //목록에서 글 제목을 클릭하면
 		e.preventDefault();
-		var num = $(this).attr('data-num'); //string으로 가져옴. attr말고 data('num')으로 쓰면 실제 자료형으로 가져옴
+		var num = $(this).attr('data-num');
 	
 	detail(num); //상세보기 함수 호출
 	});
