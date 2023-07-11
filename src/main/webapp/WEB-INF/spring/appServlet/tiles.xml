@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+       
+<tiles-definitions>
+	<!-- Default 1 레이아웃에 body 1개  -->
+	<definition name="default1" template="/WEB-INF/views/layout/layout.jsp">
+	   <put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
+	   <put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
+	</definition>
+	
+	<!-- MyPage 레이아웃 -->
+	<definition name="myPageTemplate" template="/WEB-INF/views/layout/myPage/layout_myPage.jsp">
+	   <put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
+	   <put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
+	</definition>
+
+	<!-- admin 레이아웃 -->
+	<definition name="adminTemplate" template="/WEB-INF/views/layout/admin/layout_admin.jsp">
+	   <put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
+	   <put-attribute name="admin_side" value="/WEB-INF/views/layout/admin/admin_side.jsp" />
+	   <put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
+	</definition>
+   
+   <!-- 개인 회원 마이페이지 메인 -->
+   <definition name="myPageMain" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/member/myPage/main.jsp" />
+   </definition>
+
+	
+	<!-- ############################################################################################################ -->
+	<!-- 테스트용 -->
+    <definition name="testMain" extends="default1">
+    	  <put-attribute name="body1" value="/WEB-INF/views/yunjeongTest.jsp" />
+    </definition>
+    
+    <!-- 토스 테스트 -->
+    <definition name="tossTest" extends="default1">
+    	  <put-attribute name="body1" value="/WEB-INF/views/tossTest.jsp" />
+    </definition>
+   
+    <!-- 개인 회원 마이페이지 메인 -->
+    <definition name="myPageMain" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/member_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/member_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/member/myPage/main.jsp" />
+    </definition>
+    
+	<!-- 메인 페이지 -->
+	<definition name="main" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/main/main.jsp" />
+    </definition>
+    
+	<!-- 알림 리스트 조회 -->
+	<definition name="inform_ajax" template="/WEB-INF/views/layout/layout_ajax.jsp">
+   	  <put-attribute name="body_ajax" value="/WEB-INF/views/main/inform_ajax.jsp" />
+    </definition>
+    
+	<!-- 전체 상품 조회 -->
+	<definition name="allGoodsList" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/goods/goodsTotalList.jsp" />
+    </definition>
+    
+	<!-- 전체 상품 조회 -->
+	<definition name="allGoodsList_ajax" template="/WEB-INF/views/layout/layout_ajax.jsp">
+   	  <put-attribute name="body_ajax" value="/WEB-INF/views/goods/goodsTotalList_ajax.jsp" />
+	</definition>
+	
+    <!-- 상품 상세보기 -->
+	<definition name="goodsDetail" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/goods/goodsDetail.jsp" />
+    </definition>
+    
+    <!-- 제품 찾기 폼 -->
+	<definition name="stockSearchForm" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/goods/search/stockSearchForm.jsp" />
+    </definition>
+    
+    <!-- 제품 찾기 폼 -->
+	<definition name="stockShopSearch_ajax" template="/WEB-INF/views/layout/layout_ajax.jsp">
+   	  <put-attribute name="body_ajax" value="/WEB-INF/views/goods/search/stockShopSearch_ajax.jsp" />
+    </definition>
+    
+    <!-- 통합 검색 -->
+	<definition name="totalSearch" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/main/totalSearch.jsp" />
+    </definition>
+    
+    <!-- 장바구니 -->
+	<definition name="basketList" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/member/myPage/basket/basketList.jsp" />
+    </definition>
+    
+    <!-- 공지사항 리스트 -->
+	<definition name="noticeList" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/notice/noticeList.jsp" />
+    </definition>
+    
+    <!-- 공지사항 리스트 -->
+	<definition name="noticeList_ajax" template="/WEB-INF/views/layout/layout_ajax.jsp">
+   	  <put-attribute name="body_ajax" value="/WEB-INF/views/notice/noticeList_ajax.jsp" />
+    </definition>
+    
+    <!-- 공지사항 상세보기 -->
+	<definition name="noticeDetail" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/notice/noticeDetail.jsp" />
+    </definition>
+   
+    <!-- 일반회원 로그인 선택창 -->
+	<definition name="loginSelectMember" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/login/select_member.jsp" />
+    </definition>
+    
+    <!-- 매장회원 로그인 선택창 -->
+	<definition name="loginSelectShop" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/login/select_shop.jsp" />
+    </definition>
+    
+    <!-- 브랜드회원 로그인 선택창 -->
+	<definition name="loginSelectBrand" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/login/select_brand.jsp" />
+    </definition>
+    
+    <!-- 일반회원 회원가입 폼 -->
+	<definition name="memberJoinForm" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/member/join/joinForm.jsp" />
+    </definition>
+    
+    <!-- 매장회원 회원가입 폼 -->
+	<definition name="shopJoinForm" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/shop/join/joinForm.jsp" />
+    </definition>
+    
+    <!-- 브랜드회원 회원가입 폼 -->
+	<definition name="brandJoinForm" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/brand/join/joinForm.jsp" />
+    </definition>
+
+   <!-- 개인 회원 마이페이지 회원 정보 수정 -->
+   <definition name="accountModifyForm" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/member_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/member_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/member/myPage/account/accountModifyForm.jsp" />
+    </definition>
+   
+   <!-- 개인 회원 마이페이지 회원 탈퇴 -->
+   <definition name="accountDeleteForm" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/member_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/member_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/member/myPage/account/accountDeleteForm.jsp" />
+    </definition>
+   
+   <!-- 개인 회원 찜목록 reservationList-->
+   <definition name="goodsLikeList" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/member_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/member_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/member/myPage/goodsLikeList.jsp" />
+    </definition>
+   
+   <!-- 개인 회원 픽업 예약 목록 -->
+   <definition name="reservationList" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/member_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/member_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/member/myPage/reservation/reservationList.jsp" />
+    </definition>
+   
+   <!-- 개인 회원 픽업 예약 상세 -->
+   <definition name="reservationDetail" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/member_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/member_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/member/myPage/reservation/reservationDetail.jsp" />
+    </definition>
+   
+   <!-- 개인 회원 마이 페이지 나의 문의 내역 -->
+   <definition name="csList" extends="myPageTemplate">
+    	   <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/member_myPage_header.jsp" />
+    	   <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/member_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/member/myPage/cs/csList.jsp" />
+    </definition>
+  
+   <!-- 개인 회원 마이 페이지 나의 문의 작성하기 -->
+   <definition name="csWriteForm" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/member_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/member_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/member/myPage/cs/csWriteForm.jsp" />
+    </definition>
+    
+    <!-- 문의작성 폼 모달창 매장 리스트  -->
+   <definition name="shopList_ajax" template="/WEB-INF/views/layout/layout_ajax.jsp">
+    	  <put-attribute name="body_ajax" value="/WEB-INF/views/member/myPage/cs/shopList_ajax.jsp" />
+    </definition>
+   
+    <!-- 브랜드 회원 마이페이지 메인 accountModifyForm-->
+   <definition name="brandPageMain" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/brand_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/brand_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/brand/brandPage/main.jsp" />
+    </definition>
+   
+    <!-- 브랜드 회원 마이페이지 기본 정보 수정 -->
+   <definition name="brandModifyForm" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/brand_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/brand_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/brand/brandPage/account/accountModifyForm.jsp" />
+    </definition>
+   
+    <!-- 브랜드 회원 마이페이지 전체 상품 리스트  goodsList -->
+   <definition name="goodsList" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/brand_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/brand_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/brand/goods/goodsList.jsp" />
+    </definition>
+
+	<!-- 브랜드 회원 마이페이지 상품 등록  goodsWriteForm -->
+   <definition name="goodsWriteForm" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/brand_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/brand_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/brand/goods/goodsWriteForm.jsp" />
+    </definition>
+    
+    <!-- 브랜드 회원 마이페이지 상품 수정  goodsModifyForm -->
+   <definition name="goodsModifyForm" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/brand_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/brand_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/brand/goods/goodsModifyForm.jsp" />
+    </definition>
+
+    <!-- 브랜드 회원 마이페이지 입점 매장 리스트 shopList-->
+   <definition name="shopList" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/brand_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/brand_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/brand/shop/shopList.jsp" />
+    </definition>
+   
+    <!-- 브랜드 회원 마이페이지 입점 매장 입점 요청 shopRequestList shopPage-->
+   <definition name="shopRequestList" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/brand_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/brand_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/brand/shop/shopRequestList.jsp" />
+    </definition>
+   
+    <!-- 매장 회원 마이페이지 shopPage-->
+   <definition name="shopPage" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/shop_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/shop_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/shop/shopPage/main.jsp" />
+    </definition>
+   
+    <!-- 매장 회원 마이페이지 shopAccountModifyForm-->
+   <definition name="shopModifyForm" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/shop_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/shop_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/shop/shopPage/account/accountModifyForm.jsp" />
+    </definition>
+   
+    <!-- 매장 회원 마이페이지 매장 문의 내역 csList stockList-->
+   <definition name="shopCSList" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/shop_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/shop_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/shop/shopPage/cs/csList.jsp" />
+    </definition>
+   
+   <!-- 매장 회원 마이페이지 매장 문의 상세보기 csDetail_ajax -->
+   <definition name="shopCSDetail_ajax" template="/WEB-INF/views/layout/layout_ajax.jsp">
+    	  <put-attribute name="body_ajax" value="/WEB-INF/views/shop/shopPage/cs/csDetail_ajax.jsp" />
+    </definition>
+   
+    <!-- 매장 회원 마이페이지 재 리스트 stockList-->
+	<definition name="stockList" extends="myPageTemplate">
+    	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/shop_myPage_header.jsp" />
+    	  <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/shop_myPage_side.jsp" />
+    	  <put-attribute name="myPage_main" value="/WEB-INF/views/shop/shopPage/stock/stockList.jsp" />
+    </definition>
+    
+    <!-- 매장 회원 마이페이지 매장 문의 상세보기 stockList_ajax -->
+   <definition name="stockList_ajax" template="/WEB-INF/views/layout/layout_ajax.jsp">
+    	  <put-attribute name="body_ajax" value="/WEB-INF/views/shop/shopPage/stock/stockList_ajax.jsp" />
+    </definition>
+
+	<!-- 매장 회원 마이페이지 예약 목록 reservationList-->
+   <definition name="reservationRequestList" extends="myPageTemplate">
+	  <put-attribute name="myPage_header" value="/WEB-INF/views/layout/myPage/shop_myPage_header.jsp" />
+      <put-attribute name="myPage_side" value="/WEB-INF/views/layout/myPage/shop_myPage_side.jsp" />
+   	  <put-attribute name="myPage_main" value="/WEB-INF/views/shop/shopPage/reservation/reservationRequestList.jsp" />
+   </definition> 
+
+	<!-- 관리자 페이지 공지사항 리스트 -->
+   <definition name="adminNoticeList" extends="adminTemplate">
+   	  <put-attribute name="admin_main" value="/WEB-INF/views/admin/notice/noticeList.jsp" />
+   </definition> 
+   
+	<!-- 관리자 페이지 공지사항 상세보기 -->
+   <definition name="adminNoticeDetail" extends="adminTemplate">
+   	  <put-attribute name="admin_main" value="/WEB-INF/views/admin/notice/noticeDetail.jsp" />
+   </definition> 
+   
+	<!-- 관리자 페이지 공지사항 작성폼 -->
+   <definition name="adminNoticeWriteForm" extends="adminTemplate">
+   	  <put-attribute name="admin_main" value="/WEB-INF/views/admin/notice/noticeWriteForm.jsp" />
+   </definition> 
+   
+	<!-- 관리자 페이지 공지사항 수정폼 -->
+   <definition name="adminNoticeModifyForm" extends="adminTemplate">
+   	  <put-attribute name="admin_main" value="/WEB-INF/views/admin/notice/noticeModifyForm.jsp" />
+   </definition> 
+   
+   <!-- 관리자 페이지 일반회원 리스트 -->
+   <definition name="adminMemberList" extends="adminTemplate">
+   	  <put-attribute name="admin_main" value="/WEB-INF/views/admin/user/memberList.jsp" />
+   </definition>
+   
+   <!-- 관리자 페이지 일반회원 상세보기 -->
+   <definition name="adminMemberDetail" extends="adminTemplate">
+   	  <put-attribute name="admin_main" value="/WEB-INF/views/admin/user/memberDetail.jsp" />
+   </definition>
+   
+   <!-- 관리자 페이지 매장회원 리스트 -->
+   <definition name="adminShopList" extends="adminTemplate">
+   	  <put-attribute name="admin_main" value="/WEB-INF/views/admin/user/shopList.jsp" />
+   </definition>
+   
+   <!-- 관리자 페이지 매장회원 상세보기 -->
+   <definition name="adminShopDetail" extends="adminTemplate">
+   	  <put-attribute name="admin_main" value="/WEB-INF/views/admin/user/shopDetail.jsp" />
+   </definition>
+   
+   <!-- 관리자 페이지 브랜드회원 리스트 -->
+   <definition name="adminBrandList" extends="adminTemplate">
+   	  <put-attribute name="admin_main" value="/WEB-INF/views/admin/user/brandList.jsp" />
+   </definition>
+   
+   <!-- 관리자 페이지 브랜드회원 상세보기 -->
+   <definition name="adminBrandDetail" extends="adminTemplate">
+   	  <put-attribute name="admin_main" value="/WEB-INF/views/admin/user/brandDetail.jsp" />
+   </definition>
+   
+   <!-- 관리자 페이지 브랜드회원 상세보기 -->
+   <definition name="adminGoodsTotalList" extends="adminTemplate">
+   	  <put-attribute name="admin_main" value="/WEB-INF/views/admin/goods/goodsTotalList.jsp" />
+   </definition>
+   
+   <!-- 브랜드관 -->
+   <definition name="brandInfo" extends="default1">
+   	  <put-attribute name="body1" value="/WEB-INF/views/brand/main.jsp" />
+   </definition>
+    
+</tiles-definitions>
+
+
+
+
+
+
+
+
+
+
+
+
+

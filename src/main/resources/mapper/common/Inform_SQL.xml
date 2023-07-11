@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="inform">
+<resultMap type="hashmap" id="informTest"></resultMap>
+	<!-- 알림 삽입
+		 1) 픽업 예약 상태 변경에 따른 알림 (알림유형1)
+		 2) 픽업 유효기간 -1일 때, 픽업 요청 알림 (알림유형2)
+		 3) 일반회원이 매장에 문의한 글에 답변이 달렸을 경우 알림 (알림유형3) -->
+	<insert id="insertInform" parameterType="hashmap">
+	   <![CDATA[
+		 INSERT INTO INFORM (
+		 					  INFORM_NUM,
+							  INFORM_CONTENT,
+							  INFORM_CONFIRM,
+							  INFORM_DATE,
+							  INFORM_USER,
+							  INFORM_TYPE
+						)
+		 VALUES (
+				 INFORM_SEQ.NEXTVAL,
+				 #{INFORM_CONTENT},
+				 'N',
+				 SYSDATE,
+				 #{MEM_NUM},
+				 #{INFORM_TYPE}
+				)
+		]]>
+	</insert>
+	
+	<select id="informList" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT 
+						INFORM_NUM, 
+						INFORM_CONTENT,
+						INFORM_CONFIRM,
+						INFORM_DATE,
+						INFORM_USER,
+						INFORM_TYPE
+			FROM INFORM 
+			WHERE (INFORM_USER = #{MEM_NUM} OR INFORM_USER IS NULL)
+			ORDER BY INFORM_NUM DESC
+		]]>
+	</select>
+
+	<update id="confirmUpdate" parameterType="hashmap">
+		<![CDATA[
+			UPDATE INFORM
+			SET INFORM_CONFIRM = 'Y'
+			WHERE INFORM_NUM = #{INFORM_NUM}
+		]]>
+	</update>
+	
+	<select id="informCount" parameterType="hashmap" resultType="int"> 
+		<![CDATA[
+			SELECT 
+					COUNT(INFORM_NUM)
+			FROM INFORM 
+			WHERE (INFORM_USER = #{MEM_NUM} OR INFORM_USER IS NULL)
+			AND INFORM_CONFIRM = 'N'
+		]]>
+	</select>
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="stock">
+
+	<!-- 매장별 상품 재고 리스트 (최신 등록 상품으로 정렬, 그다음은 사이즈 오름차순 정렬) -->
+	<select id="selectStockList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT *
+			FROM (SELECT 
+						SG.SHOP_GOODS_SHOP_NUM,
+				        SG.SHOP_GOODS_GOODS_NUM,
+				        SG.SHOP_GOODS_AMOUNT,
+				        SG.SHOP_GOODS_SIZE,
+				        S.SHOP_BRAND,
+				        T.TOTAL_GOODS_NAME,
+				        T.TOTAL_GOODS_MODEL,
+				        T.TOTAL_GOODS_PRICE,
+				        GI.GOODS_IMAGE_STD,
+				        ROW_NUMBER() OVER(ORDER BY SG.SHOP_GOODS_GOODS_NUM DESC) AS NUM
+			      FROM SHOP_GOODS SG, SHOP S, TOTAL_GOODS T, GOODS_IMAGE GI
+			      WHERE SG.SHOP_GOODS_SHOP_NUM = S.SHOP_NUM
+			      AND SG.SHOP_GOODS_GOODS_NUM = T.TOTAL_GOODS_NUM
+			      AND T.TOTAL_GOODS_NUM = GI.GOODS_IMAGE_PARENT
+			      AND GI.GOODS_IMAGE_ORDER = '1'
+			      AND SG.SHOP_GOODS_SHOP_NUM = #{SHOP_NUM} ]]>
+			  	  <include refid="searchStockList"></include>
+				  <![CDATA[
+				  ORDER BY SG.SHOP_GOODS_GOODS_NUM DESC, SG.SHOP_GOODS_SIZE ASC)
+			WHERE NUM BETWEEN #{START} AND #{END}
+	    ]]>
+	</select>
+
+	<!-- 재고리스트 검색조건 -->
+	<sql id="searchStockList">
+		<if test="searchType != null">
+			<if test="searchType == 'total'.toString()">AND ((T.TOTAL_GOODS_NAME LIKE '%' || #{keyword} || '%') OR (T.TOTAL_GOODS_MODEL LIKE '%' || #{keyword} || '%')) </if>
+			<if test="searchType == 'name'.toString()">AND T.TOTAL_GOODS_NAME LIKE '%' || #{keyword} || '%' </if>
+			<if test="searchType == 'model'.toString()">AND T.TOTAL_GOODS_MODEL LIKE '%' || #{keyword} || '%'</if>
+		</if>
+	</sql>
+
+
+
+	<!-- 재고리스트 페이징 카운트 -->
+	<select id="selectStockCount" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT COUNT (SHOP_GOODS_GOODS_NUM) AS STOCK_COUNT
+			FROM SHOP_GOODS S, TOTAL_GOODS T
+			WHERE S.SHOP_GOODS_GOODS_NUM = T.TOTAL_GOODS_NUM
+			AND S.SHOP_GOODS_SHOP_NUM = #{SHOP_NUM}
+		]]>
+		<include refid="searchStockList"></include>
+	</select>
+
+
+	<!-- 매장에 있는 해당 상품 사이즈정보 받아서 상품 수량 변경. 재고 업데이트-->
+	<update id="updateStock" parameterType="hashmap">
+		<![CDATA[
+			UPDATE SHOP_GOODS
+			SET SHOP_GOODS_AMOUNT = #{SHOP_GOODS_AMOUNT}
+			WHERE SHOP_GOODS_SHOP_NUM = #{SHOP_NUM}
+			AND SHOP_GOODS_GOODS_NUM = #{TOTAL_GOODS_NUM}
+			AND SHOP_GOODS_SIZE = #{SHOP_GOODS_SIZE}
+		]]>
+	</update>
+
+	<!-- 검색한 재고를 가지고 있는 매장 리스트 -->
+	<select id="selectShopStockList" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+		SELECT *
+		FROM (SELECT 
+		                    ROW_NUMBER() OVER (ORDER BY SHOP_NUM DESC) AS NUM,
+		                    S.SHOP_NUM,
+		                    S.SHOP_BRAND,
+		                    S.SHOP_NAME,
+		                    S.SHOP_TEL,
+		                    S.SHOP_ADD,
+		                    S.SHOP_POS1,
+		                    S.SHOP_POS2,
+		                    S.SHOP_START_TIME,
+		                    S.SHOP_END_TIME,
+		                    TG.TOTAL_GOODS_NUM,
+		                    TG.TOTAL_GOODS_NAME,
+		                    SG.SHOP_GOODS_SHOP_NUM,
+		                    SG.SHOP_GOODS_SIZE,
+		                    SG.SHOP_GOODS_AMOUNT
+		          FROM
+		                    SHOP S, SHOP_GOODS SG, TOTAL_GOODS TG
+		          WHERE SG.SHOP_GOODS_SHOP_NUM = S.SHOP_NUM
+		          AND SG.SHOP_GOODS_GOODS_NUM = TG.TOTAL_GOODS_NUM
+		          AND S.SHOP_DEL_GB = 'N'
+		          AND S.SHOP_JOIN_APPROVE = 'Y'
+		          AND S.SHOP_BRAND LIKE '%'||#{BRAND_NAME}||'%'
+		          AND UPPER(TG.TOTAL_GOODS_NAME) LIKE UPPER('%'||#{GOODS_NAME}||'%')
+		          AND SG.SHOP_GOODS_SIZE = #{GOODS_SIZE}]]>
+		         <include refid="shopName"/>
+		         <![CDATA[
+		) WHERE NUM BETWEEN #{START} AND #{END}
+		]]>
+	</select>
+
+	<select id="selectShopStockCount" parameterType="hashmap" resultType="int"> 
+    <![CDATA[
+	SELECT	 
+	                    COUNT(S.SHOP_NUM) AS SHOP_COUNT
+	          FROM
+	                    SHOP S, SHOP_GOODS SG, TOTAL_GOODS TG
+	          WHERE SG.SHOP_GOODS_SHOP_NUM = S.SHOP_NUM
+	          AND SG.SHOP_GOODS_GOODS_NUM = TG.TOTAL_GOODS_NUM
+	          AND S.SHOP_DEL_GB = 'N'
+	          AND S.SHOP_JOIN_APPROVE = 'Y'
+	          AND S.SHOP_BRAND LIKE '%'||#{BRAND_NAME}||'%'
+	          AND UPPER(TG.TOTAL_GOODS_NAME) LIKE UPPER('%'||#{GOODS_NAME}||'%')
+	          AND SG.SHOP_GOODS_SIZE = #{GOODS_SIZE}]]>
+	         <include refid="shopName"/>
+	</select>
+	
+	<sql id="shopName">
+	    <if test="SHOP_NAME != null">
+	        AND S.SHOP_NAME LIKE '%'||#{SHOP_NAME}||'%'
+	    </if>
+	</sql>
+</mapper>

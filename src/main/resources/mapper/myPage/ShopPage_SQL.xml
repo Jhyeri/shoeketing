@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shopPage">
+
+	<!-- 매장 기본정보 조회 -->
+	<select id="selectShopInfo" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT
+				SHOP_NUM,
+				SHOP_ID,
+				SHOP_BRAND,
+				SHOP_NAME,
+				SHOP_TEL,
+				SHOP_ADD,
+				SHOP_POS1,
+				SHOP_POS2,
+				SHOP_JOIN_APPROVE,
+				SHOP_DEL_GB,
+				SHOP_START_TIME,
+				SHOP_END_TIME
+			FROM SHOP
+			WHERE SHOP_NUM = #{SHOP_NUM}
+		]]>
+	</select>
+	
+	<!-- 해당 브랜드 로고파일 가져오기 -->
+	<select id="selectBrandLogoFileOfShop" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT 
+					B.BRAND_LOGO_FILE
+			FROM 
+					BRAND B, SHOP S
+			WHERE 
+					B.BRAND_NAME = S.SHOP_BRAND
+			AND 
+					SHOP_NUM = #{SHOP_NUM}
+		]]>
+	</select>
+
+	<!-- 매장 기본정보 수정 -->
+	<update id="updateShopInfo" parameterType="hashmap">
+		<![CDATA[
+			UPDATE SHOP
+			SET SHOP_PW = #{SHOP_PW},
+				SHOP_TEL = #{SHOP_TEL},
+				SHOP_START_TIME = #{SHOP_START_TIME},
+				SHOP_END_TIME = #{SHOP_END_TIME},
+				SHOP_ADD = #{SHOP_ADD},
+				SHOP_POS1 = #{SHOP_POS1},
+				SHOP_POS2 = #{SHOP_POS2}
+			WHERE SHOP_NUM = #{SHOP_NUM}
+		]]>
+	</update>
+	
+
+	
+	<!-- 재고조회 및 관리 - 매장상세보기쪽!  -->
+	<!-- 매장별 해당 상품 재고량 조회 -->
+	<select id="selectGoodsAmount" parameterType="hashmap" resultType="int"> 
+		<![CDATA[
+			SELECT SHOP_GOODS_AMOUNT
+			FROM SHOP_GOODS
+			WHERE SHOP_GOODS_SHOP_NUM = #{SHOP_NUM}
+			AND SHOP_GOODS_GOODS_NUM = #{TOTAL_GOODS_NUM}
+			AND SHOP_GOODS_SIZE = #{SHOP_GOODS_SIZE}
+		]]>
+	</select>
+
+	
+</mapper>

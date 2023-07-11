@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="goods">
+	
+	<!-- 브랜드 전체 상품 리스트 -->
+	<select id="selectBrandGoodsList" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+            SELECT *
+            FROM (SELECT
+	                       B.BRAND_NUM,
+	                       B.BRAND_NAME,
+	                       TG.TOTAL_GOODS_NUM,
+	                       TG.TOTAL_GOODS_NAME,
+	                       TG.TOTAL_GOODS_MODEL,
+	                       TG.TOTAL_GOODS_CATEGORY,
+	                       TG.TOTAL_GOODS_PRICE,
+	                       GI.GOODS_IMAGE_STD,
+	                       ROW_NUMBER() OVER (ORDER BY TOTAL_GOODS_NUM DESC) AS NUM
+                  FROM 
+                           TOTAL_GOODS TG, BRAND B, GOODS_IMAGE GI       
+                  WHERE    TG.TOTAL_GOODS_BRAND = B.BRAND_NUM AND TG.TOTAL_GOODS_NUM = GI.GOODS_IMAGE_PARENT
+                           AND TG.TOTAL_GOODS_DEL_GB = 'N'
+                           AND GI.GOODS_IMAGE_ORDER = 1
+                           AND B.BRAND_NAME = #{BRAND_NAME}
+		]]>
+        <include refid="searchGoods"></include>
+       <!--  <include refid="goodsNameSearch"></include>
+        <include refid="goodsModelSearch"></include> -->
+        <![CDATA[
+        	)WHERE NUM BETWEEN #{START} AND #{END}
+        ]]>
+	</select>
+    
+    <sql id="searchGoods">
+		<if test='searchType == "모델명" and keyword != ""'>
+			  AND UPPER(TG.TOTAL_GOODS_NAME) like UPPER('%' || #{keyword} ||'%')
+		</if>
+		<if test='searchType == "모델 번호" and keyword != ""'>
+			  AND UPPER(TG.TOTAL_GOODS_MODEL) like UPPER('%' || #{keyword} ||'%')
+		</if>
+	</sql>
+    
+     <sql id="goodsNameSearch">
+		<if test="nameKeyword!=null and nameKeyword!=''">
+	         AND UPPER(TG.TOTAL_GOODS_NAME) like UPPER('%' || #{nameKeyword} ||'%')
+		</if>
+	</sql>
+    
+    <sql id="goodsModelSearch">
+		<if test="modelKeyword!=null and modelKeyword!=''">
+	           AND UPPER(TG.TOTAL_GOODS_MODEL) like UPPER('%' || #{modelKeyword} ||'%')
+		</if>
+	</sql>
+	
+	<!-- 브랜드 전체 상품 토탈 개수 -->
+	<select id="selectBrandGoodsCount" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT COUNT(TOTAL_GOODS_NAME) BRAND_GOODS_COUNT
+            FROM TOTAL_GOODS TG, BRAND B
+            WHERE  TG.TOTAL_GOODS_BRAND = B.BRAND_NUM
+            AND TG.TOTAL_GOODS_DEL_GB = 'N'
+            AND B.BRAND_NAME = #{BRAND_NAME}
+        ]]>
+		<!-- <include refid="goodsNameSearch"></include>
+        <include refid="goodsModelSearch"></include> -->
+		 <include refid="searchGoods"></include>
+	</select>
+
+
+	<!-- 브랜드 상품 등록 -->
+	<insert id="insertGoods" parameterType="hashmap" useGeneratedKeys="true" keyProperty="TOTAL_GOODS_NUM">
+		<selectKey keyProperty="TOTAL_GOODS_NUM" resultType="int" order="BEFORE">
+            SELECT TOTAL_GOODS_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+        INSERT INTO TOTAL_GOODS (TOTAL_GOODS_NUM, 
+                                 TOTAL_GOODS_BRAND, 
+                                 TOTAL_GOODS_NAME, 
+                                 TOTAL_GOODS_MODEL, 
+                                 TOTAL_GOODS_CATEGORY, 
+                                 TOTAL_GOODS_PRICE, 
+                                 TOTAL_GOODS_DEL_GB)
+        VALUES(#{TOTAL_GOODS_NUM}, 
+               #{BRAND_NUM}, 
+               #{TOTAL_GOODS_NAME}, 
+               #{TOTAL_GOODS_MODEL}, 
+               #{TOTAL_GOODS_CATEGORY},  
+               #{TOTAL_GOODS_PRICE}, 
+               'N')
+        ]]>
+	</insert>      
+
+	<!-- 상품 등록시, 상품 상세(사이즈) 삽입 -->
+	<!-- 상품 수정 폼에서 선택한 사이즈 반복문 돌려서 새로 삽입 -->
+	<insert id="insertGoodsDetail" parameterType="hashmap">
+    <![CDATA[
+        INSERT INTO GOODS_DETAIL(GOODS_DETAIL_NUM,
+                                 GOODS_DETAIL_SIZE)
+        VALUES(#{TOTAL_GOODS_NUM},
+               #{GOODS_DETAIL_SIZE})
+    ]]>
+	</insert>
+
+	<!-- 상품 등록시, 상품 이미지 삽입 -->
+	<insert id="insertGoodsImage" parameterType="hashmap">
+		<![CDATA[
+            INSERT INTO GOODS_IMAGE(GOODS_IMAGE_NUM, 
+                                    GOODS_IMAGE_PARENT, 
+                                    GOODS_IMAGE_ORG, 
+                                    GOODS_IMAGE_STD, 
+                                    GOODS_IMAGE_DEL_GB, 
+                                    GOODS_IMAGE_ORDER)
+            VALUES(GOODS_IMAGE_SEQ.NEXTVAL, 
+                   #{TOTAL_GOODS_NUM}, 
+                   #{GOODS_IMAGE_ORG},
+                   #{GOODS_IMAGE_STD},
+                   'N', 
+                   #{GOODS_IMAGE_ORDER})            
+        ]]>
+	</insert>
+	
+	<!-- 브랜드에 해당하는 매장 이름 및 매장번호 조회 -->
+    <select id="selectShopNumName" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT
+				SHOP_NAME,
+				SHOP_NUM
+			FROM SHOP
+			WHERE SHOP_BRAND = #{BRAND_NAME}
+		]]>
+	</select> 
+	
+	<!-- 브랜드가 새로운 상품 등록시, 해당 브랜드의 매장들에 상품 등록 -->
+    <insert id="insertShopGoodsAddByBrand" parameterType="hashmap">
+	    <![CDATA[
+	        INSERT INTO SHOP_GOODS(SHOP_GOODS_SHOP_NUM, 
+                                   SHOP_GOODS_GOODS_NUM,
+                                   SHOP_GOODS_AMOUNT, 
+                                   SHOP_GOODS_SIZE)
+	        VALUES(#{SHOP_GOODS_SHOP_NUM},
+                   #{TOTAL_GOODS_NUM},
+                   0,
+                   #{GOODS_DETAIL_SIZE})
+	    ]]>
+	</insert>
+
+	<!-- 브랜드 상품 상세조회 -->
+	<select id="selectGoodsDetail" parameterType="hashmap" resultType="hashmap"> 
+	    <![CDATA[
+	        SELECT  
+                  B.BRAND_NUM,
+                  B.BRAND_NAME,
+                  TG.TOTAL_GOODS_NUM,
+                  TG.TOTAL_GOODS_NAME,
+                  TG.TOTAL_GOODS_MODEL,
+                  TG.TOTAL_GOODS_CATEGORY,
+                  TG.TOTAL_GOODS_PRICE,
+                  TG.TOTAL_GOODS_SCORE_AVG,
+                  GD.GOODS_DETAIL_SIZE,
+                  GD.GOODS_DETAIL_NUM,
+                  GD.GOODS_DETAIL_SIZE
+	        FROM BRAND B, TOTAL_GOODS TG, GOODS_DETAIL GD
+	        WHERE B.BRAND_NUM = TG.TOTAL_GOODS_BRAND
+	        AND TG.TOTAL_GOODS_NUM = GD.GOODS_DETAIL_NUM
+	        AND TG.TOTAL_GOODS_DEL_GB = 'N'
+	        AND TG.TOTAL_GOODS_NUM = #{TOTAL_GOODS_NUM}
+	    ]]>
+	</select>
+
+	<!-- 상품 삭제(실제 삭제X. DEL_GB만 Y로 변경) -->
+	<update id="deleteGoods" parameterType="hashmap">
+		<![CDATA[
+			UPDATE TOTAL_GOODS
+			SET TOTAL_GOODS_DEL_GB = 'Y'
+			WHERE TOTAL_GOODS_NUM = #{TOTAL_GOODS_NUM}
+		]]>
+	</update>
+
+	<!-- 상품 이미지 삭제 (실제 삭제X. DEL_GB만 Y로 변경) -->
+	<update id="deleteGoodsImage" parameterType="hashmap">
+		<![CDATA[
+            UPDATE GOODS_IMAGE
+            SET GOODS_IMAGE_DEL_GB = 'Y'
+            WHERE GOODS_IMAGE_PARENT = #{TOTAL_GOODS_NUM}
+        ]]>
+	</update>
+
+	<!-- 상품 이미지 수정 -->
+	<update id="updateGoodsImageModify" parameterType="hashMap">
+		<![CDATA[
+			UPDATE GOODS_IMAGE
+			SET GOODS_IMAGE_DEL_GB = 'N',
+                GOODS_IMAGE_ORDER = #{GOODS_IMAGE_ORDER}
+			WHERE GOODS_IMAGE_NUM = #{GOODS_IMAGE_NUM}
+		]]>
+	</update>
+
+	<!-- 상품 수정 (상품 상세정보 수정,사이즈만 따로) -->
+	<update id="updateGoodsModify" parameterType="hashmap">
+	    <![CDATA[
+	        UPDATE TOTAL_GOODS
+	        SET TOTAL_GOODS_NAME = #{TOTAL_GOODS_NAME},
+	              TOTAL_GOODS_MODEL = #{TOTAL_GOODS_MODEL},
+	              TOTAL_GOODS_CATEGORY = #{TOTAL_GOODS_CATEGORY},
+	              TOTAL_GOODS_PRICE = #{TOTAL_GOODS_PRICE}
+	        WHERE TOTAL_GOODS_NUM = #{TOTAL_GOODS_NUM}
+	    ]]>
+	</update>
+    
+    <!-- 상품 상세 삭제(상품 수정시, 원래 선택되어 있던 사이즈 전체 삭제) -->
+	<delete id="deleteGoodsDetail" parameterType="hashmap">
+	    <![CDATA[
+	        DELETE 
+	        FROM GOODS_DETAIL
+	        WHERE GOODS_DETAIL_NUM = #{TOTAL_GOODS_NUM}
+	    ]]>
+	</delete>
+	
+  	<!--  해당 제품에 해당하는 사이즈 재고 1개라도 있는 매장 총 개수 -->
+    <select id="selectShopCountFromStockOfSize" parameterType="hashmap" resultType="int"> 
+	    <![CDATA[
+            SELECT 
+                    NVL(SHOP_NUM_COUNT, 0) AS SHOP_NUM
+            FROM(
+                 SELECT 
+                         COUNT(SHOP_GOODS_SHOP_NUM) AS SHOP_NUM_COUNT
+                 FROM 
+                     	SHOP_GOODS
+                 WHERE 
+                         SHOP_GOODS_SIZE =  #{GOODS_DETAIL_SIZE}
+                     AND SHOP_GOODS_AMOUNT > 0
+                     AND SHOP_GOODS_GOODS_NUM = #{TOTAL_GOODS_NUM}
+        )        
+	    ]]>
+	</select>
+    
+    <!-- 해당 제품에 해당하는 사이즈 재고 총 개수 -->
+    <select id="selectGoodsAmountFromStockOfSize" parameterType="hashmap" resultType="int"> 
+	    <![CDATA[
+            SELECT 
+                  NVL(SHOP_GOODS_AMOUNT, 0) AS SHOP_GOODS_AMOUNT
+            FROM(
+                 SELECT 
+                       	SUM(SHOP_GOODS_AMOUNT) AS SHOP_GOODS_AMOUNT
+                 FROM 
+                        SHOP_GOODS
+                 WHERE 
+                        SHOP_GOODS_SIZE = #{GOODS_DETAIL_SIZE}
+                    AND SHOP_GOODS_GOODS_NUM = #{TOTAL_GOODS_NUM}
+        )
+	    ]]>
+	</select>
+
+	<!-- 브랜드가 해당 상품 사이즈 삭제할경우 (매장재고 0이라는 가정 하) 매장별 상품 삭제 -->
+	<delete id="deleteShopGoodsFromDeleteByBrand" parameterType="hashmap">
+	    <![CDATA[
+	        DELETE 
+	        FROM 
+	              SHOP_GOODS
+	        WHERE 
+				  SHOP_GOODS_GOODS_NUM = #{TOTAL_GOODS_NUM}
+	    ]]>
+	</delete>
+
+
+	<select id="selectAllGoodsList" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[    
+			SELECT *
+		  	FROM (SELECT   
+		]]>
+		  <include refid="orderOption"></include> 
+	   	<![CDATA[        
+                        BRAND_NUM, 
+                        BRAND_NAME, 
+                        TOTAL_GOODS_NUM,  
+                        TOTAL_GOODS_LIKE_COUNT,
+                        TOTAL_GOODS_SCORE_AVG,
+                        TOTAL_GOODS_NAME, 
+                        TOTAL_GOODS_MODEL, 
+                        TOTAL_GOODS_CATEGORY, 
+                        TOTAL_GOODS_PRICE, 
+                        GOODS_IMAGE_STD
+        		FROM (SELECT DISTINCT
+			                        B.BRAND_NUM, 
+			                        B.BRAND_NAME, 
+			                        TG.TOTAL_GOODS_NUM, 
+			                        TG.TOTAL_GOODS_LIKE_COUNT, 
+			                        TG.TOTAL_GOODS_SCORE_AVG,
+			                        TG.TOTAL_GOODS_NAME, 
+			                        TG.TOTAL_GOODS_MODEL, 
+			                        TG.TOTAL_GOODS_CATEGORY, 
+			                        TG.TOTAL_GOODS_PRICE, 
+			                        GI.GOODS_IMAGE_STD
+                    FROM BRAND B, TOTAL_GOODS TG, GOODS_DETAIL GD, GOODS_IMAGE GI, GOODS_LIKE GL
+                    WHERE B.BRAND_NUM = TG.TOTAL_GOODS_BRAND
+                    AND TG.TOTAL_GOODS_NUM = GD.GOODS_DETAIL_NUM
+                    AND TG.TOTAL_GOODS_NUM = GI.GOODS_IMAGE_PARENT
+                    AND TG.TOTAL_GOODS_NUM = GL.GOODS_LIKE_PRONUM(+)
+                    AND TG.TOTAL_GOODS_DEL_GB = 'N'
+                    AND GI.GOODS_IMAGE_ORDER = 1
+		  ]]>
+		  <include refid="categoryOption"></include>
+ 		  <include refid="brandOption"></include>
+		  <include refid="sizeOption"></include>
+		  <include refid="priceOption"></include>
+	   	  <![CDATA[ ) T)
+				WHERE NUM BETWEEN #{START} AND #{END}
+		  ]]>
+	</select>
+
+	<sql id="orderOption">
+			<if test="listType == null || listType == 'undefined'.toString() || listType == ''">
+				ROW_NUMBER() OVER (ORDER BY TOTAL_GOODS_NUM DESC) AS NUM,
+			</if>
+<!-- jsp에서 listType 기본 값을 null로 줘서 바로 위<if test="listType == null"[>문이 실행될 수가 없음 -->
+			<if test="listType != null and listType != 'undefined'.toString()">
+			<if test="listType == 'null'.toString()">ROW_NUMBER() OVER (ORDER BY TOTAL_GOODS_NUM DESC) AS NUM,</if>
+			<if test="listType == '최신순'.toString()">ROW_NUMBER() OVER (ORDER BY TOTAL_GOODS_NUM DESC) AS NUM,</if>
+			<if test="listType == '낮은가격순'.toString()">ROW_NUMBER() OVER (ORDER BY TOTAL_GOODS_PRICE) AS NUM,</if>
+			<if test="listType == '높은가격순'.toString()">ROW_NUMBER() OVER (ORDER BY TOTAL_GOODS_PRICE DESC) AS NUM,</if>
+			<if test="listType == '별점순'.toString()">ROW_NUMBER() OVER (ORDER BY TOTAL_GOODS_SCORE_AVG) AS NUM,</if>
+			<if test="listType == '찜순'.toString()">ROW_NUMBER() OVER (ORDER BY TOTAL_GOODS_LIKE_COUNT DESC) AS NUM,</if>
+			</if>
+	</sql>
+
+	<sql id="categoryOption">
+			<if test="categoryType != null and categoryType != 'undefined'.toString()">
+			<if test="categoryType == 'S'.toString()">AND TG.TOTAL_GOODS_CATEGORY = '스니커즈'</if>
+			<if test="categoryType == 'C'.toString()">AND TG.TOTAL_GOODS_CATEGORY = '캔버스화'</if>
+			<if test="categoryType == 'R'.toString()">AND TG.TOTAL_GOODS_CATEGORY = '러닝화'</if>
+			</if>
+	</sql>
+
+	<sql id="brandOption">
+			<if test="brandType != null and brandType != 'undefined'.toString()">
+			<if test="brandType == '나이키'.toString()">AND B.BRAND_NAME = '나이키'</if>
+			<if test="brandType == '아디다스'.toString()">AND B.BRAND_NAME = '아디다스'</if>
+			<if test="brandType == '뉴발란스'.toString()">AND B.BRAND_NAME = '뉴발란스'</if>
+			<if test="brandType == '푸마'.toString()">AND B.BRAND_NAME = '푸마'</if>
+			<if test="brandType == '컨버스'.toString()">AND B.BRAND_NAME = '컨버스'</if>
+			<if test="brandType == '반스'.toString()">AND B.BRAND_NAME = '반스'</if>
+			<if test="brandType == '아식스'.toString()">AND B.BRAND_NAME = '아식스'</if>
+			<if test="brandType == '리복'.toString()">AND B.BRAND_NAME = '리복'</if>
+			<if test="brandType == '폴더'.toString()">AND B.BRAND_NAME = '폴더'</if>
+			<if test="brandType == '디스커버리'.toString()">AND B.BRAND_NAME = '디스커버리'</if>
+			<if test="brandType == '휠라'.toString()">AND B.BRAND_NAME = '휠라'</if>
+			</if>
+	</sql>
+
+	<sql id="sizeOption">
+			<if test="sizeType != null and sizeType != 'undefined'.toString()">
+			<if test="sizeType == '200'.toString()">AND GD.GOODS_DETAIL_SIZE = 200</if>
+			<if test="sizeType == '205'.toString()">AND GD.GOODS_DETAIL_SIZE = 205</if>
+			<if test="sizeType == '210'.toString()">AND GD.GOODS_DETAIL_SIZE = 210</if>
+			<if test="sizeType == '215'.toString()">AND GD.GOODS_DETAIL_SIZE = 215</if>
+			<if test="sizeType == '220'.toString()">AND GD.GOODS_DETAIL_SIZE = 220</if>
+			<if test="sizeType == '225'.toString()">AND GD.GOODS_DETAIL_SIZE = 225</if>
+			<if test="sizeType == '230'.toString()">AND GD.GOODS_DETAIL_SIZE = 230</if>
+			<if test="sizeType == '235'.toString()">AND GD.GOODS_DETAIL_SIZE = 235</if>
+			<if test="sizeType == '240'.toString()">AND GD.GOODS_DETAIL_SIZE = 240</if>
+			<if test="sizeType == '245'.toString()">AND GD.GOODS_DETAIL_SIZE = 245</if>
+			<if test="sizeType == '250'.toString()">AND GD.GOODS_DETAIL_SIZE = 250</if>
+			<if test="sizeType == '255'.toString()">AND GD.GOODS_DETAIL_SIZE = 255</if>
+			<if test="sizeType == '260'.toString()">AND GD.GOODS_DETAIL_SIZE = 260</if>
+			<if test="sizeType == '265'.toString()">AND GD.GOODS_DETAIL_SIZE = 265</if>
+			<if test="sizeType == '270'.toString()">AND GD.GOODS_DETAIL_SIZE = 270</if>
+			<if test="sizeType == '275'.toString()">AND GD.GOODS_DETAIL_SIZE = 265</if>
+			<if test="sizeType == '280'.toString()">AND GD.GOODS_DETAIL_SIZE = 280</if>
+			<if test="sizeType == '285'.toString()">AND GD.GOODS_DETAIL_SIZE = 285</if>
+			<if test="sizeType == '290'.toString()">AND GD.GOODS_DETAIL_SIZE = 290</if>
+			<if test="sizeType == '295'.toString()">AND GD.GOODS_DETAIL_SIZE = 295</if>
+			</if>
+	</sql>
+
+	<sql id="priceOption">
+			<if test="priceType != null and priceType != 'undefined'.toString()">
+			<if test="priceType == 'A'.toString()">AND TG.TOTAL_GOODS_PRICE BETWEEN 0 AND 99999</if>
+			<if test="priceType == 'B'.toString()">AND TG.TOTAL_GOODS_PRICE BETWEEN 100000 AND 199999</if>
+			<if test="priceType == 'C'.toString()">AND TG.TOTAL_GOODS_PRICE BETWEEN 200000 AND 299999</if>
+			<if test="priceType == 'D'.toString()">AND TG.TOTAL_GOODS_PRICE BETWEEN 300000 AND 399999</if>
+			<if test="priceType == 'E'.toString()">AND TG.TOTAL_GOODS_PRICE BETWEEN 400000 AND 499999</if>
+			<if test="priceType == 'F'.toString()">AND TG.TOTAL_GOODS_PRICE BETWEEN 500000 AND 599999</if>
+			</if>
+	</sql>
+
+	<select id="selectAllGoodsCount" parameterType="hashmap" resultType="int"> 
+	<![CDATA[    
+		SELECT COUNT(R)
+		FROM (SELECT ROWNUM R 
+			FROM (SELECT COUNT(*) AS ALL_GOODS_COUNT
+				FROM BRAND B, TOTAL_GOODS TG, GOODS_DETAIL GD, GOODS_IMAGE GI
+				WHERE B.BRAND_NUM = TG.TOTAL_GOODS_BRAND
+				AND TG.TOTAL_GOODS_NUM = GD.GOODS_DETAIL_NUM
+				AND TG.TOTAL_GOODS_NUM = GI.GOODS_IMAGE_PARENT
+				AND TG.TOTAL_GOODS_DEL_GB = 'N'
+				AND GI.GOODS_IMAGE_ORDER = 1
+				
+	]]>
+			  <include refid="categoryOption"></include>
+	 		  <include refid="brandOption"></include>
+			  <include refid="sizeOption"></include>
+			  <include refid="priceOption"></include>
+	<![CDATA[
+			GROUP BY TG.TOTAL_GOODS_NUM))
+	]]>
+	</select>
+
+	<select id="selectAllBrandList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT	
+					BRAND_NUM,
+    				BRAND_NAME,
+    				BRAND_LOGO_FILE
+			FROM BRAND
+			WHERE BRAND_DEL_GB = 'N'
+			ORDER BY BRAND_NUM
+		]]>
+	</select>
+	
+	<select id="selectBrandList" parameterType="hashmap" resultType="string">
+		<![CDATA[
+			SELECT	
+    				BRAND_NAME
+			FROM BRAND
+			WHERE BRAND_DEL_GB = 'N'
+			AND BRAND_NAME LIKE '%' || #{BRAND_NAME} ||'%'
+			ORDER BY BRAND_NUM
+		]]>
+	</select>
+	
+	<select id="selectGoodsLike" parameterType="hashmap" resultType="int"> 
+		<![CDATA[
+			SELECT COUNT(*)
+			FROM GOODS_LIKE
+			WHERE GOODS_LIKE_USER = #{MEM_NUM}
+			AND GOODS_LIKE_PRONUM = #{TOTAL_GOODS_NUM}
+		]]>
+	</select>
+
+
+	<select id="selectBrandDetail" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT
+				BRAND_NUM,
+				BRAND_NAME
+			FROM BRAND
+			WHERE BRAND_NUM = #{BRAND_NUM}
+		]]>
+	</select>
+
+
+	<!-- 상품 상세조회시, 상품 이미지 조회 -->
+	<select id="selectGoodsImage" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT
+				GOODS_IMAGE_NUM,
+				GOODS_IMAGE_PARENT,
+				GOODS_IMAGE_ORG,
+				GOODS_IMAGE_STD,
+				GOODS_IMAGE_DEL_GB,
+				GOODS_IMAGE_ORDER
+			FROM GOODS_IMAGE
+			WHERE GOODS_IMAGE_PARENT = #{TOTAL_GOODS_NUM}
+			AND GOODS_IMAGE_DEL_GB='N'
+		]]>
+	</select>
+
+	<select id="selectReviewDetail" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT
+				REVIEW_NUM,
+				REVIEW_PRONUM,
+				REVIEW_WRITER,
+				REVIEW_SCORE,
+				REVIEW_SIZE,
+				REVIEW_COLOR,
+				REVIEW_COMFORT
+			FROM REVIEW
+			WHERE REVIEW_PRONUM = #{TOTAL_GOODS_NUM}
+		]]>
+	</select>
+	
+	<select id="selectReviewCount" parameterType="hashmap" resultType="int"> 
+		<![CDATA[
+			SELECT
+				COUNT(REVIEW_NUM) AS REVIEW_COUNT
+			FROM REVIEW
+			WHERE REVIEW_PRONUM = #{TOTAL_GOODS_NUM}
+		]]>
+	</select>
+	
+	<insert id="insertGoodsLike" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO GOODS_LIKE(
+					          GOODS_LIKE_NUM,
+					          GOODS_LIKE_USER,
+					          GOODS_LIKE_PRONUM
+					          )
+			VALUES (
+				GOODS_LIKE_SEQ.NEXTVAL,
+				#{MEM_NUM},
+				#{GOODS_LIKE_PRONUM}
+				)
+		]]>
+	</insert>
+	
+	<!-- 찜 취소 -->
+	<delete id="deleteGoodsLike" parameterType="hashmap">
+		<![CDATA[
+			DELETE FROM GOODS_LIKE
+			WHERE GOODS_LIKE_PRONUM = #{GOODS_LIKE_PRONUM}
+			      AND GOODS_LIKE_USER = #{MEM_NUM}
+		]]>
+	</delete>
+	
+	<!-- 찜하기 시, TOTAL_GOODS 테이블의 TOTAL_GOODS_LIKE_COUNT + 1씩 (UPDATE 쿼리) -->
+	<update id="updateGoodsLikeCountIncrease" parameterType="hashmap">
+	    <![CDATA[
+	        UPDATE TOTAL_GOODS
+	        SET TOTAL_GOODS_LIKE_COUNT = TOTAL_GOODS_LIKE_COUNT + 1
+	        WHERE TOTAL_GOODS_NUM = #{GOODS_LIKE_PRONUM}
+	    ]]>
+	</update>
+	
+	<!-- 찜하기 취소시, TOTAL_GOODS 테이블의 TOTAL_GOODS_LIKE_COUNT - 1씩 (UPDATE 쿼리) -->
+	<update id="updateGoodsLikeCountDecrease" parameterType="hashmap">
+	    <![CDATA[
+	        UPDATE TOTAL_GOODS
+	        SET TOTAL_GOODS_LIKE_COUNT = TOTAL_GOODS_LIKE_COUNT - 1
+	        WHERE TOTAL_GOODS_NUM = #{GOODS_LIKE_PRONUM}
+	    ]]>
+	</update>
+</mapper>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="join">
+
+<!-- 이메일 중복체크  -->
+	<select id="selectEmailCheck" parameterType="hashmap" resultType="hashmap">
+	<![CDATA[  
+		SELECT MEM_EMAIL
+		FROM MEMBER
+		WHERE MEM_EMAIL = #{MEM_EMAIL}
+	]]>
+	</select>
+	
+	<!-- 회원탈퇴 이력 확인 -->
+	<select id="selectDelGB" parameterType="hashmap" resultType="int">
+	<![CDATA[
+			SELECT COUNT(*)
+			FROM MEMBER
+			WHERE MEM_NAME = #{MEM_NAME} 
+            AND MEM_PHONE = #{MEM_PHONE}
+            AND MEM_DEL_GB = 'Y'     
+	]]>
+	</select>
+	
+	<!-- 회원탈퇴 후 7일 지났는지 여부 확인 -->
+	<!-- 이름, 생년월일, 휴대폰번호 입력받아서 현재시간 - 이전에 탈퇴한시간 >=7일 이상일 경우 데이터 조회  -->
+	<select id="selectDelCount" parameterType="hashmap" resultType="int">
+	<![CDATA[
+			SELECT COUNT(MEM_DEL_TIME)
+			FROM MEMBER
+			WHERE SYSDATE - MEM_DEL_TIME >= 7
+			AND MEM_NAME = #{MEM_NAME} 
+            	AND MEM_PHONE = #{MEM_PHONE}
+            
+	]]>
+	</select>
+	
+	<!-- 회원가입 성공 -->
+	<insert id="insertMember" parameterType="hashmap">
+   <![CDATA[  
+      INSERT INTO MEMBER(
+                	 MEM_NUM,
+                    MEM_EMAIL,
+                    MEM_NAME,
+                    MEM_PW,
+                    MEM_PHONE,
+                    MEM_DEL_GB,
+                    MEM_INFORM_AGREE)
+         VALUES(
+               	MEMBER_SEQ.NEXTVAL,
+               	#{MEM_EMAIL},
+				#{MEM_NAME},
+               	#{MEM_PW},
+               	#{MEM_PHONE},
+               	'N',
+               	'N')
+      ]]>
+   </insert>
+   
+   <!-- 브랜드 회원가입 성공 -->
+   <insert id="insertBrand" parameterType="hashmap">
+   <![CDATA[  
+      INSERT INTO BRAND(
+                	 BRAND_NUM,
+                    BRAND_ID,
+                    BRAND_PW,
+                    BRAND_NAME,
+                    BRAND_BUSINESS_NUM,
+                    BRAND_ADD,
+                    BRAND_LOGO_FILE,
+                    BRAND_JOINDATE,
+                    BRAND_DEL_GB)
+         VALUES(
+               	BRAND_SEQ.NEXTVAL,
+               	#{BRAND_ID},
+		#{BRAND_PW},
+               	#{BRAND_NAME},
+               	#{BRAND_BUSINESS_NUM},
+		#{BRAND_ADD},
+		#{BRAND_LOGO_FILE},
+		SYSDATE,
+               	'N')
+      ]]>
+   </insert>
+   
+   <!-- 매장 회원 가입성공 -->
+   <insert id="insertShop" parameterType="hashmap" >
+   <![CDATA[  
+      INSERT INTO SHOP(
+                	SHOP_NUM,
+                SHOP_ID,
+                SHOP_PW,
+                SHOP_BRAND,
+                SHOP_NAME,
+                SHOP_TEL,
+                SHOP_START_TIME,
+                SHOP_END_TIME,
+                SHOP_ADD,
+                SHOP_POS1,
+                SHOP_POS2,
+                SHOP_JOIN_APPROVE,
+                SHOP_DEL_GB)
+         VALUES(
+               	SHOP_SEQ.NEXTVAL,
+               	#{SHOP_ID},
+		#{SHOP_PW},
+                #{SHOP_BRAND},
+               	#{SHOP_NAME},
+               	#{SHOP_TEL},
+		#{SHOP_START_TIME},
+		#{SHOP_END_TIME},
+		#{SHOP_ADD},
+		#{SHOP_POS1},
+		#{SHOP_POS2},
+		'N',
+               	'N')
+      ]]>
+   </insert>
+
+
+</mapper>

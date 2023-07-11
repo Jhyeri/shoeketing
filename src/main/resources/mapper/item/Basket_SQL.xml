@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="basket">
+
+<!-- 장바구니 상품 리스트 -->
+<select id="selectBasketList" parameterType="hashmap" resultType="hashmap"> 
+	<![CDATA[
+		SELECT
+         B.BASKET_NUM,
+	     B.BASKET_MEM_NUM,
+	     B.BASKET_SHOP_NUM,
+	     B.BASKET_SIZE,
+	     TG.TOTAL_GOODS_NUM,
+	     TG.TOTAL_GOODS_BRAND,
+	     TG.TOTAL_GOODS_NAME,
+	     TG.TOTAL_GOODS_MODEL,
+	     TG.TOTAL_GOODS_PRICE,
+	     S.SHOP_NUM,
+	     S.SHOP_NAME,
+	     S.SHOP_ADD,
+         GI.GOODS_IMAGE_STD,
+         BR.BRAND_NAME,
+         SG.SHOP_GOODS_AMOUNT
+        FROM TOTAL_GOODS TG, SHOP S, BASKET B, GOODS_IMAGE GI, BRAND BR, SHOP_GOODS SG
+        WHERE TG.TOTAL_GOODS_NUM = B.BASKET_PRONUM AND B.BASKET_SHOP_NUM = S.SHOP_NUM
+        AND TG.TOTAL_GOODS_NUM = GI.GOODS_IMAGE_PARENT
+        AND TG.TOTAL_GOODS_BRAND = BR.BRAND_NUM
+        AND SG.SHOP_GOODS_GOODS_NUM = TG.TOTAL_GOODS_NUM
+        AND SG.SHOP_GOODS_SHOP_NUM = S.SHOP_NUM
+        AND B.BASKET_SIZE = SG.SHOP_GOODS_SIZE
+		AND TG.TOTAL_GOODS_DEL_GB = 'N'
+	    AND B.BASKET_MEM_NUM = #{BASKET_MEM_NUM}
+	    AND B.BASKET_DEL_GB = 'N'
+	    AND S.SHOP_DEL_GB = 'N'
+        AND GI.GOODS_IMAGE_ORDER = 1
+	]]>
+</select>
+
+<!-- 장바구니 추가 -->
+<insert id="insertBasket" parameterType="hashmap">
+<![CDATA[
+	INSERT INTO BASKET(
+		BASKET_NUM,
+		BASKET_PRONUM,
+		BASKET_MEM_NUM,
+		BASKET_SHOP_NUM,
+		BASKET_SIZE
+		)
+	VALUES(
+		BASKET_SEQ.NEXTVAL,
+		#{TOTAL_GOODS_NUM},
+		#{MEM_NUM},
+		#{SHOP_NUM},
+		#{BASKET_SIZE}
+		)
+]]>
+</insert>
+
+<!-- 이미 장바구니에 추가된 상품 확인 -->
+<select id="selectBasketCheck" parameterType="hashmap" resultType="int">
+<![CDATA[
+	SELECT
+		COUNT(*)
+	FROM
+		BASKET
+	WHERE
+		BASKET_PRONUM = #{TOTAL_GOODS_NUM}
+		AND BASKET_MEM_NUM = #{MEM_NUM}
+		AND BASKET_SHOP_NUM = #{SHOP_NUM}
+		AND BASKET_SIZE = #{BASKET_SIZE}
+		AND BASKET_DEL_GB = 'N'
+]]>
+</select>
+
+<!-- 장바구니 상품 개수 확인 -->
+<select id="selectBasketCnt" parameterType="hashmap" resultType="int">
+<![CDATA[
+	SELECT
+		COUNT(*)
+	FROM
+		BASKET
+	WHERE
+		BASKET_MEM_NUM = #{MEM_NUM}
+		AND BASKET_DEL_GB = 'N'
+]]>
+</select>
+
+<!-- 장바구니 삭제 -->
+<update id="deleteBasket" parameterType="hashmap">
+	<![CDATA[
+		UPDATE BASKET
+		SET BASKET_DEL_GB = 'Y'
+		WHERE BASKET_MEM_NUM = #{BASKET_MEM_NUM}
+		AND BASKET_NUM = #{BASKET_NUM}
+	]]>
+</update>
+
+</mapper>

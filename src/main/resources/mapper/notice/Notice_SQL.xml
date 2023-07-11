@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="notice">
+   <select id="selectNoticeList" parameterType="hashmap" resultType="hashmap">
+      <![CDATA[
+      SELECT NOTICE_NUM,
+            NOTICE_TITLE, 
+            TO_CHAR(NOTICE_DATE, 'YYYY.MM.DD') AS NOTICE_DATE,
+            TO_CHAR(NOTICE_DATE, 'HH24:MI:SS') AS NOTICE_TIME
+      FROM (SELECT
+                  ROWNUM RNUM, T1.*
+                  FROM (SELECT /*+ INDEX_DESC(NOTICE PK_NOTICE) */ *
+                              FROM NOTICE
+                              WHERE NOTICE_DEL_GB = 'N']]>
+                              <include refid="noticeSearch"/><![CDATA[) T1
+                  WHERE ROWNUM <= #{END})
+      WHERE RNUM >= #{START} AND NOTICE_DEL_GB = 'N'
+      ]]>
+   </select>
+
+   <sql id="noticeSearch">
+      <if test="searchType != null">
+      	 <if test="searchType == 'total'.toString()">AND ((NOTICE_TITLE LIKE '%' || #{keyword} || '%') OR (NOTICE_CONTENT LIKE '%' || #{keyword} || '%'))</if>
+         <if test="searchType == 'title'.toString()">AND NOTICE_TITLE LIKE '%' || #{keyword} || '%'</if>
+         <if test="searchType == 'content'.toString()">AND NOTICE_CONTENT LIKE '%' || #{keyword} || '%'</if>
+      </if>
+   </sql>
+
+<select id="selectNoticeCount" parameterType="hashmap" resultType="int"> 
+	<![CDATA[
+		SELECT COUNT(NOTICE_NUM) NOTICE_COUNT
+		FROM NOTICE
+		WHERE NOTICE_DEL_GB = 'N'
+	]]>
+		<include refid="noticeSearch"></include>
+</select>
+
+<select id="selectNoticeDetail" parameterType="hashmap" resultType="hashmap">
+	<![CDATA[
+		SELECT
+				NOTICE_NUM,
+				NOTICE_TITLE,
+				TO_CHAR(NOTICE_DATE, 'YYYY.MM.DD') AS NOTICE_DATE,
+				TO_CHAR(NOTICE_DATE, 'HH24:MI:SS') AS NOTICE_TIME,
+				NOTICE_CONTENT
+		FROM NOTICE
+		WHERE NOTICE_NUM = #{NOTICE_NUM}
+			AND NOTICE_DEL_GB='N'
+	]]>
+</select>
+</mapper>

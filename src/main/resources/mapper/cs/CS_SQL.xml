@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cs">
+
+	<!-- 개인회원 문의 리스트 -->
+	<select id="selectCSList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+					CS_NUM,
+					CS_TITLE,
+					TO_CHAR(CS_DATE, 'YYYY/MM/DD') AS CS_DATE
+			FROM (SELECT
+						ROWNUM RNUM,
+						T1.*
+				  FROM (SELECT /*+ INDEX_DESC(CS PK_CS) */ *
+							FROM CS
+							WHERE CS_DEL_GB='N'
+							AND CS_WRITER = #{MEM_NUM}) T1
+					WHERE ROWNUM <= #{END})
+				WHERE RNUM >= #{START}
+						AND CS_DEL_GB = 'N'
+		]]>
+	</select>
+
+	<!-- 나의 문의 내역 개수 가져오기 -->
+	<select id="selectCSCount" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT COUNT(*) AS CS_COUNT
+			FROM CS
+			WHERE CS_WRITER = #{MEM_NUM}
+				AND CS_DEL_GB = 'N'
+		]]>
+	</select> 
+
+
+	<!-- 매장으로 문의하기 작성 -->
+	<insert id="insertCS" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO CS
+							(CS_NUM,
+							CS_SHOP_NUM,
+							CS_TITLE,
+							CS_WRITER,
+							CS_CONTENT,
+							CS_DATE)
+			VALUES (CS_SEQ.NEXTVAL,
+					#{CS_SHOP_NUM},
+					#{CS_TITLE},
+					#{CS_WRITER},
+					#{CS_CONTENT},
+					SYSDATE
+					)
+		]]>
+	</insert>
+	
+	<!-- 나의 문의글 삭제 -->
+	<update id="deleteCS" parameterType="hashmap">
+		<![CDATA[
+			UPDATE CS
+			SET
+				CS_DEL_GB = 'Y'
+			WHERE CS_NUM = #{CS_NUM}
+		]]>
+	</update>
+	
+	
+	
+	<!-- 지점 리스트 가져오기 -->
+	<select id="selectShopListSearch" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				RNUM,
+				SHOP_NUM,
+				SHOP_NAME,
+				SHOP_ADD
+			FROM (SELECT
+						ROWNUM RNUM,
+						T1.*
+				  FROM (SELECT
+							/*+ INDEX_DESC(SHOP PK_SHOP) */ *
+							FROM SHOP
+							WHERE SHOP_DEL_GB = 'N'
+								AND SHOP_JOIN_APPROVE = 'Y') T1
+				  WHERE ROWNUM<=#{END}
+		]]>		 <include refid="shopSearch"/> <![CDATA[)
+			WHERE RNUM>=#{START}
+		]]>
+	</select>
+	
+	<!-- 검색조건  -->
+	<sql id="shopSearch">
+		<if test="keyword != null">
+			AND SHOP_NAME LIKE '%' || #{keyword} || '%'
+		</if>
+	</sql>
+	
+	<!-- 지점 리스트 개수 가져오기 -->
+	<select id="selectShopCount" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT COUNT(*) AS SHOP_COUNT
+			FROM SHOP
+			WHERE SHOP_DEL_GB = 'N'
+			AND SHOP_JOIN_APPROVE = 'Y'
+		]]>		
+		<include refid="shopSearch"/>
+	</select>
+
+	<!-- 매장회원 문의내역 리스트 -->
+	<select id="selectShopCSList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT *
+			FROM (SELECT 
+                    ROW_NUMBER() OVER (ORDER BY CS_NUM DESC) AS NUM,
+                    C.CS_NUM,
+                    C.CS_TITLE,
+                    C.CS_CONTENT,
+                    TO_CHAR(C.CS_DATE, 'YYYY/MM/DD') AS CS_DATE,
+                    M.MEM_NAME,
+                    M.MEM_EMAIL
+                    FROM CS C, MEMBER M
+                    WHERE C.CS_WRITER = M.MEM_NUM
+                    AND CS_DEL_GB = 'N'
+                    AND CS_SHOP_NUM = #{SHOP_NUM}) 
+			WHERE NUM BETWEEN #{START} AND #{END}
+		]]>
+	</select>
+
+	<!-- 매장 문의내역 글 토탈 개수 -->
+	<select id="selectShopCSCount" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT COUNT(CS_NUM) AS SHOP_CS_COUNT
+			FROM CS
+			WHERE CS_SHOP_NUM = #{SHOP_NUM}
+		]]>
+	</select>
+	
+	<!-- 매장 문의내역 상세보기 -->
+	<select id="selectCSDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+					M.MEM_EMAIL,
+					M.MEM_NUM,
+                    C.CS_NUM,
+					C.CS_SHOP_NUM,
+					C.CS_TITLE,
+					C.CS_CONTENT,
+					TO_CHAR(CS_DATE, 'YYYY.MM.DD') AS CS_DATE
+			FROM CS C, MEMBER M
+			WHERE C.CS_WRITER = M.MEM_NUM
+            AND CS_NUM = #{CS_NUM}
+			AND CS_DEL_GB = 'N'
+		]]>
+	</select> 
+
+	<!-- 매장 문의내역 댓글 조회 -->
+	<select id="selectCSReply" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+					CS_REPLY_NUM,
+					CS_REPLY_CONTENT
+			FROM CS_REPLY
+			WHERE CS_REPLY_NUM = #{CS_NUM}    
+		]]>
+	</select> 
+	
+	<!-- 매장 문의내역 댓글(답변) 작성. 알림 가도록 하는건 Inform쪽에 작성(insertInform) -->
+	<insert id="insertCSReply" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO CS_REPLY(
+				CS_REPLY_NUM,
+				CS_REPLY_CONTENT
+				)
+			VALUES(
+				#{CS_REPLY_NUM},
+				#{CS_REPLY_CONTENT}
+				)
+		]]>
+	</insert>
+
+</mapper>

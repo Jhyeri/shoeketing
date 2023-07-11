@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberPage">
+
+
+<!-- 회원정보 가져오기 -->
+<select id="selectAccountInfo" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+	SELECT
+			MEM_EMAIL,
+			MEM_NAME,
+			MEM_PHONE,
+			MEM_INFORM_AGREE,
+			MEM_GRADE
+FROM MEMBER
+WHERE MEM_NUM=#{MEM_NUM}
+	  AND MEM_DEL_GB = 'N'
+]]>
+</select>
+
+
+<!-- 회원 정보 수정 -->
+<update id="updateAccountModify" parameterType="hashmap">
+
+<![CDATA[
+UPDATE MEMBER
+SET
+	MEM_PW=#{MEM_PW},
+	MEM_INFORM_AGREE = #{MEM_INFORM_AGREE}
+WHERE MEM_NUM = #{MEM_NUM}
+]]>
+</update>
+
+<!-- 탈퇴 전 비밀번호 확인 -->
+<select id="selectPw" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+	SELECT
+			MEM_PW
+	FROM MEMBER
+	WHERE MEM_EMAIL = #{MEM_EMAIL}
+		  AND MEM_DEL_GB='N'
+]]>
+</select>
+
+<!-- 예약상태 가져오기 (탈퇴 전) -->
+<select id="selectReservationStatus" resultType="int" parameterType="hashmap">
+<![CDATA[
+	SELECT
+			COUNT(*) AS RESERVATION_COUNT
+	FROM RESERVATION
+	WHERE RESERVATION_USER = #{MEM_NUM}
+		  AND RESERVATION_DEL_GB = 'N'
+		  AND RESERVATION_STATUS = '픽업 대기중'
+]]>
+</select>
+
+<!-- 회원 탈퇴 -->
+<update id="deleteAccount" parameterType="hashmap">
+<![CDATA[
+UPDATE MEMBER
+SET
+	MEM_DEL_GB = 'Y',
+	MEM_DEL_TIME = SYSDATE
+WHERE MEM_NUM=#{MEM_NUM}
+]]>
+</update>
+
+<!-- 찜 목록 가져오기 
+회원이 찜한 상품의 브랜드명, 상품명, 모델번호, 가격, 이미지 가져오기 -->
+<select id="selectGoodsLikeList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT *
+			FROM (SELECT 
+        		B.BRAND_NAME,
+				T.TOTAL_GOODS_NAME,
+				T.TOTAL_GOODS_MODEL,
+				T.TOTAL_GOODS_PRICE,
+				T.TOTAL_GOODS_NUM,
+				GI.GOODS_IMAGE_STD,
+				ROW_NUMBER() OVER(ORDER BY G.GOODS_LIKE_NUM DESC) AS NUM
+				FROM BRAND B, TOTAL_GOODS T, GOODS_LIKE G, GOODS_IMAGE GI
+				WHERE B.BRAND_NUM = T.TOTAL_GOODS_BRAND
+				AND GI.GOODS_IMAGE_PARENT = T.TOTAL_GOODS_NUM
+				AND G.GOODS_LIKE_USER= #{MEM_NUM}
+				AND T.TOTAL_GOODS_NUM = G.GOODS_LIKE_PRONUM
+				AND T.TOTAL_GOODS_DEL_GB = 'N'
+				AND GI.GOODS_IMAGE_ORDER= 1
+					)
+			WHERE NUM BETWEEN #{START} AND #{END}
+		]]>
+</select>
+
+
+<!-- 찜 목록 개수 가져오기 --> 
+<select id="selectGoodsLikeCount" parameterType="hashmap" resultType="int">
+<![CDATA[
+	SELECT
+		   COUNT(*) AS GOODS_LIKE_COUNT
+	FROM GOODS_LIKE
+	WHERE GOODS_LIKE_USER=#{MEM_NUM}
+]]>
+</select> 
+
+
+<!-- 찜 취소 -->
+<delete id="deleteGoodsLike" parameterType="hashmap">
+<![CDATA[
+DELETE FROM GOODS_LIKE
+WHERE GOODS_LIKE_PRONUM = #{TOTAL_GOODS_NUM}
+      AND GOODS_LIKE_USER=#{MEM_NUM}
+]]>
+</delete>
+
+<!-- 찜하기 취소시, TOTAL_GOODS 테이블의 TOTAL_GOODS_LIKE_COUNT - 1씩 (UPDATE 쿼리) -->
+<update id="updateGoodsLikeCountDecrease" parameterType="hashmap">
+    <![CDATA[
+        UPDATE TOTAL_GOODS
+        SET TOTAL_GOODS_LIKE_COUNT = TOTAL_GOODS_LIKE_COUNT - 1
+        WHERE TOTAL_GOODS_NUM = #{TOTAL_GOODS_NUM}
+    ]]>
+</update>
+
+</mapper>

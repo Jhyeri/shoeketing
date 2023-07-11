@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="reservation">
+
+	<!-- 나의 픽업 예약 리스트 (일반회원) -->
+	<select id="selectPickupList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT *
+			FROM (SELECT
+				            R.RESERVATION_NUM,
+				            R.RESERVATION_STATUS,
+							R.RESERVATION_SIZE,
+							R.RESERVATION_SHOP_NUM,
+				            TO_CHAR(R.RESERVATION_DATE, 'YYYY/MM/DD') AS RESERVATION_DATE,
+							TO_CHAR(R.RESERVATION_PICKUP_DATE, 'YYYY/MM/DD') AS RESERVATION_PICKUP_DATE,
+				            B.BRAND_NAME,
+							T.TOTAL_GOODS_NUM,
+				            T.TOTAL_GOODS_NAME,
+				            T.TOTAL_GOODS_MODEL,
+				            T.TOTAL_GOODS_PRICE,
+				            T.TOTAL_GOODS_DEL_GB,
+				            R.RESERVATION_DEL_GB,
+							G.GOODS_IMAGE_STD,
+				            ROW_NUMBER() OVER(ORDER BY RESERVATION_NUM DESC) AS NUM
+			      FROM RESERVATION R, BRAND B, TOTAL_GOODS T, GOODS_IMAGE G
+			   	  WHERE B.BRAND_NUM = T.TOTAL_GOODS_BRAND
+			      AND R.RESERVATION_PRONUM = T.TOTAL_GOODS_NUM
+				  AND T.TOTAL_GOODS_NUM = G.GOODS_IMAGE_PARENT
+				  AND R.RESERVATION_USER = #{MEM_NUM}
+				  AND G.GOODS_IMAGE_ORDER = 1
+				  AND G.GOODS_IMAGE_DEL_GB = 'N')
+			WHERE NUM BETWEEN #{START} AND #{END}
+		]]>
+	</select>
+
+
+	<!-- 픽업 예약 리스트 토탈개수 (일반회원) -->
+	<select id="selectPickupCount" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT COUNT(*) AS RESERVATION_COUNT
+			FROM RESERVATION
+			WHERE RESERVATION_USER = #{MEM_NUM}
+		]]>
+	</select>
+
+
+	<!-- 픽업 예약 상세조회 -->
+	<select id="selectPickupDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+			        R.RESERVATION_NUM,
+			        R.RESERVATION_SHOP_NUM,
+			        R.RESERVATION_PRONUM,
+			        R.RESERVATION_USER,
+			        R.RESERVATION_SIZE,
+			        R.RESERVATION_STATUS,
+			        TO_CHAR(R.RESERVATION_PICKUP_DATE, 'YYYY/MM/DD') AS RESERVATION_PICKUP_DATE,
+                    G.GOODS_IMAGE_STD,
+			        T.TOTAL_GOODS_PRICE,
+			        T.TOTAL_GOODS_NAME,
+			        T.TOTAL_GOODS_MODEL,
+			        S.SHOP_BRAND,
+					S.SHOP_NAME,
+					S.SHOP_ADD,
+					S.SHOP_END_TIME,
+					TO_CHAR(R.RESERVATION_DATE, 'YYYY/MM/DD') AS RESERVATION_DATE,
+					TO_CHAR(R.RESERVATION_PICKUP_DATE+2, 'YYYY/MM/DD') AS RESERVATION_EXP
+			FROM SHOP S, RESERVATION R, TOTAL_GOODS T, GOODS_IMAGE G
+			WHERE R.RESERVATION_SHOP_NUM = S.SHOP_NUM
+			AND R.RESERVATION_PRONUM = T.TOTAL_GOODS_NUM	
+            AND R.RESERVATION_PRONUM = G.GOODS_IMAGE_PARENT
+            AND GOODS_IMAGE_ORDER = 1
+			AND R.RESERVATION_NUM = #{RESERVATION_NUM}
+		]]>
+	</select>
+	
+	<!-- 예약 취소. 일반 회원/매장이 예약 대기중인 상태에서 예약 취소 혹은, 매장이 픽업 승인 거부. 이때는 재고변동 X -->
+	<update id="deleteReservation" parameterType="hashmap">
+		<![CDATA[
+			UPDATE 
+					RESERVATION
+			SET
+					RESERVATION_STATUS = '예약 취소'
+			WHERE 
+					RESERVATION_NUM = #{RESERVATION_NUM}
+		]]>
+	</update>
+
+
+	<!-- 픽업 대기중. 일반 회원/매장이 픽업 대기중인 상태에서 픽업 예약 취소. 이때는 재고변동 O -->
+	<update id="deletePickup" parameterType="hashmap">
+		<![CDATA[
+			UPDATE 
+					RESERVATION
+			SET
+					RESERVATION_STATUS = '픽업 취소'
+			WHERE 
+					RESERVATION_NUM = #{RESERVATION_NUM}
+		]]>
+	</update>
+
+
+	<!-- 픽업 취소 후 재고 +1 -->
+	<update id="updateStockIncrease" parameterType="hashmap">
+		<![CDATA[
+			UPDATE 
+					SHOP_GOODS
+			SET 
+					SHOP_GOODS_AMOUNT = SHOP_GOODS_AMOUNT + 1
+			WHERE 
+					SHOP_GOODS_GOODS_NUM = #{TOTAL_GOODS_NUM}
+					AND SHOP_GOODS_SHOP_NUM = #{SHOP_NUM}
+					AND SHOP_GOODS_SIZE = #{SHOP_GOODS_SIZE}
+		]]>
+	</update>
+
+
+	<!-- 픽업 예약 요청 리스트 (매장) -->
+	<select id="selectReservationRequestList" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT *
+			FROM  (SELECT
+							R.RESERVATION_NUM,
+							R.RESERVATION_PRONUM,
+							R.RESERVATION_SHOP_NUM,
+							R.RESERVATION_SIZE,
+							R.RESERVATION_USER,
+							R.RESERVATION_PHONE,
+							R.RESERVATION_STATUS,
+							TO_CHAR(R.RESERVATION_DATE, 'YYYY/MM/DD') AS RESERVATION_DATE,
+							TO_CHAR(R.RESERVATION_PICKUP_DATE, 'YYYY/MM/DD') AS RESERVATION_PICKUP_DATE,
+							M.MEM_NAME,
+							M.MEM_NUM,
+							TG.TOTAL_GOODS_PRICE,
+							TG.TOTAL_GOODS_NAME,
+							TG.TOTAL_GOODS_MODEL,
+							GI.GOODS_IMAGE_NUM,
+							GI.GOODS_IMAGE_STD,
+							ROW_NUMBER() OVER(ORDER BY RESERVATION_NUM DESC) AS NUM
+					FROM RESERVATION R, TOTAL_GOODS TG, GOODS_IMAGE GI, MEMBER M
+					WHERE R.RESERVATION_PRONUM = TG.TOTAL_GOODS_NUM 
+					AND TG.TOTAL_GOODS_NUM = GI.GOODS_IMAGE_PARENT
+					AND R.RESERVATION_USER = M.MEM_NUM
+					AND GI.GOODS_IMAGE_ORDER=1
+					AND R.RESERVATION_SHOP_NUM = #{RESERVATION_SHOP_NUM})
+			WHERE NUM BETWEEN #{START} AND #{END}
+		]]>
+	</select>
+
+
+	<!-- 해당매장의 총 픽업 예약개수 (매장) -->
+	<select id="selectReservationCount" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT COUNT(RESERVATION_NUM) AS RESERVATION_COUNT
+			FROM RESERVATION
+			WHERE RESERVATION_SHOP_NUM = #{SHOP_NUM}
+		]]>
+	</select>
+
+
+	<!-- 픽업 예약 승인 (매장) -->
+	<update id="updateReservationApprove" parameterType="hashmap">
+		<![CDATA[
+			UPDATE 
+					RESERVATION
+			SET 
+					RESERVATION_STATUS = '픽업 대기중'
+			WHERE 
+					RESERVATION_NUM = #{RESERVATION_NUM}
+		]]>
+	</update>
+
+
+	<!-- 픽업 예약 승인시, 재고 -1 (매장) -->
+	<update id="updateStockDecrease" parameterType="hashmap">
+		<![CDATA[
+			UPDATE 
+					SHOP_GOODS
+			SET 
+					SHOP_GOODS_AMOUNT = SHOP_GOODS_AMOUNT - 1
+			WHERE 
+					SHOP_GOODS_GOODS_NUM = #{RESERVATION_PRONUM}
+					AND SHOP_GOODS_SHOP_NUM = #{RESERVATION_SHOP_NUM}
+					AND SHOP_GOODS_SIZE = #{RESERVATION_SIZE}
+		]]>
+	</update>
+	
+	<!-- orderId 가져오기 -->
+	<select id="selectOrderId" parameterType="hashmap" resultType="long">
+		<![CDATA[
+			SELECT NVL(NUM, 0) AS RESERVATION_NUM
+			FROM (
+					SELECT MAX(RESERVATION_NUM) AS NUM
+					FROM RESERVATION
+				 )
+		]]>
+	</select>
+	
+	<!-- 예약금 결제 성공 -->
+	<insert id="insertReservation" parameterType="hashmap">
+	<![CDATA[
+		INSERT INTO RESERVATION(
+				RESERVATION_NUM,
+				RESERVATION_PRONUM,
+				RESERVATION_SHOP_NUM,
+				RESERVATION_SIZE,
+				RESERVATION_USER,
+				RESERVATION_PHONE,
+				RESERVATION_STATUS,
+				RESERVATION_PICKUP_DATE,
+				RESERVATION_DATE
+				)
+		VALUES(
+				RESERVATION_SEQ.NEXTVAL,
+				#{RESERVATION_PRONUM},
+				#{RESERVATION_SHOP_NUM},
+				#{RESERVATION_SIZE},
+				#{RESERVATION_USER},
+				#{RESERVATION_PHONE},
+	            '예약 대기중',
+				#{RESERVATION_PICKUP_DATE},
+				SYSDATE
+		)
+	]]>
+	</insert>
+	
+	<!-- 픽업 완료 -->
+	<!-- 매장이 픽업 완료버튼 클릭시, 픽업 상태변경 -->
+	<update id="updateReservationStatusAfterPickUp" parameterType="hashmap">
+	    <![CDATA[
+	        UPDATE 
+	                    RESERVATION
+	        SET 
+	                    RESERVATION_STATUS = '픽업 완료'
+	        WHERE 
+	                    RESERVATION_NUM = #{RESERVATION_NUM}
+	    ]]>
+	</update>
+
+	<!-- 매장이 픽업 완료버튼 클릭시, 회원 픽업 횟수 변경 -->
+	<update id="updateMemberPickupCountAfterPickUp" parameterType="hashmap">
+	    <![CDATA[
+	        UPDATE 
+	                    MEMBER
+	        SET 
+	                    MEM_PICKUP_COUNT = MEM_PICKUP_COUNT + 1
+	        WHERE 
+	                    MEM_NUM = #{MEM_NUM}
+	    ]]>
+	</update>
+
+</mapper>

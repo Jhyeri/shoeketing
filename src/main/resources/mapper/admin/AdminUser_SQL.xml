@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="adminUser">
+		
+		<select id="selectMemberList" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT   
+						MEM_NUM,
+		          		MEM_EMAIL,
+		          		MEM_NAME,
+		          		MEM_GRADE,
+		          		MEM_DEL_GB
+			FROM  (SELECT ROWNUM RNUM, T1.*
+				FROM (SELECT /*+ INDEX_DESC(MEMBER PK_MEMBER) */ *
+					FROM MEMBER
+					WHERE MEM_ADMIN = 'N']]>
+					<include refid="searchMember"></include><![CDATA[ )T1
+					WHERE ROWNUM <= #{END})
+			WHERE RNUM >= #{START}
+		]]>	
+		</select>
+		
+		
+		<select id="selectMemberCount" parameterType="hashmap" resultType="int">
+				<![CDATA[
+					SELECT COUNT(MEM_NUM) MEMBER_COUNT
+					FROM MEMBER
+					WHERE MEM_ADMIN = 'N'
+				]]>
+				<include refid="searchMember"></include>
+		</select>
+		
+		<sql id="searchMember">
+				<if test="searchType != null">
+					<if test="searchType == 'total'.toString()">AND (
+																(MEM_NUM LIKE #{keyword})
+																OR (MEM_EMAIL LIKE '%' || #{keyword} || '%')
+																OR (MEM_NAME LIKE '%' || #{keyword} || '%')
+																OR (MEM_GRADE LIKE '%' || #{keyword} || '%')
+																OR (MEM_DEL_GB LIKE '%' || #{keyword} || '%')
+																)</if>
+					<if test="searchType == 'num'.toString()">AND MEM_NUM LIKE #{keyword}</if>
+					<if test="searchType == 'email'.toString()">AND MEM_EMAIL LIKE '%' || #{keyword} || '%'</if>
+					<if test="searchType == 'name'.toString()">AND MEM_NAME LIKE '%' || #{keyword} || '%'</if>
+					<if test="searchType == 'grade'.toString()">AND MEM_GRADE LIKE '%' || #{keyword} || '%' </if>
+					<if test="searchType == 'del_gb'.toString()">AND MEM_DEL_GB LIKE '%' || #{keyword} || '%'</if>
+				</if>
+		</sql>
+
+		<select id="selectMemberDetail" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT 
+				MEM_NUM,
+				MEM_EMAIL,
+				MEM_NAME,
+				MEM_PHONE,
+				MEM_DEL_GB,
+				MEM_INFORM_AGREE,
+				MEM_GRADE
+			FROM MEMBER
+			WHERE MEM_NUM = #{MEM_NUM}
+		]]>	
+		</select>
+
+		<update id="deleteMember" parameterType="hashmap">
+		<![CDATA[
+			UPDATE MEMBER
+			SET MEM_DEL_GB='Y',
+		                MEM_DEL_TIME = SYSDATE
+			WHERE MEM_NUM = #{MEM_NUM}
+		]]>	
+		</update>
+		
+		<select id="selectShopList" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT   
+						SHOP_NUM,
+		          		SHOP_ID,
+		          		SHOP_BRAND,
+		          		SHOP_NAME,
+		          		SHOP_DEL_GB
+			FROM  (SELECT ROWNUM RNUM, T1.*
+				FROM (SELECT /*+ INDEX_DESC(SHOP PK_SHOP) */ *
+					FROM SHOP
+					]]><include refid="searchShop"></include><![CDATA[ )T1
+					WHERE ROWNUM <= #{END})
+			WHERE RNUM >= #{START}
+		]]>	
+		</select>
+		
+		
+		<select id="selectShopCount" parameterType="hashmap" resultType="int">
+				<![CDATA[
+					SELECT COUNT(SHOP_NUM) SHOP_COUNT
+					FROM SHOP
+				]]>
+				<include refid="searchShop"></include>
+		</select>
+		
+		<sql id="searchShop">
+				<if test="searchType != null">
+					<if test="searchType == 'total'.toString()">WHERE (
+																(SHOP_NUM LIKE #{keyword})
+																OR (SHOP_ID LIKE '%' || #{keyword} || '%')
+																OR (SHOP_BRAND LIKE '%' || #{keyword} || '%')
+																OR (SHOP_NAME LIKE '%' || #{keyword} || '%')
+																OR (SHOP_DEL_GB LIKE '%' || #{keyword} || '%')
+																)</if>
+					<if test="searchType == 'num'.toString()">WHERE SHOP_NUM LIKE #{keyword}</if>
+					<if test="searchType == 'id'.toString()">WHERE SHOP_ID LIKE '%' || #{keyword} || '%'</if>
+					<if test="searchType == 'brandName'.toString()">WHERE SHOP_BRAND LIKE '%' || #{keyword} || '%'</if>
+					<if test="searchType == 'shopName'.toString()">WHERE SHOP_NAME LIKE '%' || #{keyword} || '%' </if>
+					<if test="searchType == 'del_gb'.toString()">WHERE SHOP_DEL_GB LIKE '%' || #{keyword} || '%'</if>
+				</if>
+		</sql>
+
+		<select id="selectShopDetail" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT 
+				SHOP_NUM,
+				SHOP_ID,
+				SHOP_BRAND,
+				SHOP_NAME,
+				SHOP_TEL,
+				SHOP_ADD,
+				SHOP_START_TIME,
+				SHOP_END_TIME,
+				SHOP_DEL_GB
+			FROM SHOP
+			WHERE SHOP_NUM = #{SHOP_NUM}
+		]]>	
+		</select>
+
+		<update id="deleteShop" parameterType="hashmap">
+		<![CDATA[
+			UPDATE SHOP
+			SET SHOP_DEL_GB = 'Y'
+			WHERE SHOP_NUM = #{SHOP_NUM}
+		]]>	
+		</update>
+		
+		<select id="selectBrandList" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT   
+						BRAND_NUM,
+		          		BRAND_ID,
+		          		BRAND_NAME,
+		          		BRAND_DEL_GB
+			FROM  (SELECT ROWNUM RNUM, T1.*
+				FROM (SELECT /*+ INDEX_DESC(BRAND PK_BRAND) */ *
+					FROM BRAND
+					]]><include refid="searchBrand"></include><![CDATA[ )T1
+					WHERE ROWNUM <= #{END})
+			WHERE RNUM >= #{START}
+		]]>	
+		</select>
+		
+		
+		<select id="selectBrandCount" parameterType="hashmap" resultType="int">
+				<![CDATA[
+					SELECT COUNT(BRAND_NUM) BRAND_COUNT
+					FROM BRAND
+				]]>
+				<include refid="searchBrand"></include>
+		</select>
+		
+		<sql id="searchBrand">
+				<if test="searchType != null">
+					<if test="searchType == 'total'.toString()">WHERE (
+																(BRAND_NUM LIKE #{keyword})
+																OR (BRAND_ID LIKE '%' || #{keyword} || '%')
+																OR (BRAND_NAME LIKE '%' || #{keyword} || '%')
+																OR (BRAND_DEL_GB LIKE '%' || #{keyword} || '%')
+																)</if>
+					<if test="searchType == 'num'.toString()">WHERE BRAND_NUM LIKE #{keyword}</if>
+					<if test="searchType == 'id'.toString()">WHERE BRAND_ID LIKE '%' || #{keyword} || '%'</if>
+					<if test="searchType == 'name'.toString()">WHERE BRAND_NAME LIKE '%' || #{keyword} || '%'</if>
+					<if test="searchType == 'del_gb'.toString()">WHERE BRAND_DEL_GB LIKE '%' || #{keyword} || '%'</if>
+				</if>
+		</sql>
+
+		<select id="selectBrandDetail" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT 
+				BRAND_NUM,
+		        BRAND_ID,
+		        BRAND_NAME,
+		        BRAND_BUSINESS_NUM,
+		        BRAND_ADD,
+		        BRAND_JOINDATE,
+		        BRAND_DEL_GB
+			FROM BRAND
+			WHERE BRAND_NUM = #{BRAND_NUM}
+		]]>	
+		</select>
+
+		<update id="deleteBrand" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BRAND
+			SET BRAND_DEL_GB = 'Y'
+			WHERE BRAND_NUM = #{BRAND_NUM}
+		]]>	
+		</update>
+</mapper>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="adminBoard">
+
+	 <select id="selectNoticeList" parameterType="hashmap" resultType="hashmap">
+	      <![CDATA[
+	      SELECT NOTICE_NUM,
+	            NOTICE_TITLE, 
+	            TO_CHAR(NOTICE_DATE, 'YYYY.MM.DD') AS NOTICE_DATE,
+	            TO_CHAR(NOTICE_DATE, 'HH24:MI:SS') AS NOTICE_TIME
+	      FROM (SELECT
+	                  ROWNUM RNUM, T1.*
+	                  FROM (SELECT /*+ INDEX_DESC(NOTICE PK_NOTICE) */ *
+	                              FROM NOTICE
+	                              WHERE NOTICE_DEL_GB = 'N']]>
+	                              <include refid="noticeSearch"/><![CDATA[) T1
+	                  WHERE ROWNUM <= #{END})
+	      WHERE RNUM >= #{START} AND NOTICE_DEL_GB = 'N'
+	      ]]>
+	   </select>
+
+
+	   <sql id="noticeSearch">
+	      <if test="searchType != null">
+	         <if test="searchType == 'total'.toString()">AND ((NOTICE_TITLE LIKE '%' || #{keyword} || '%') OR (NOTICE_CONTENT LIKE '%' || #{keyword} || '%'))</if>
+	         <if test="searchType == 'title'.toString()">AND NOTICE_TITLE LIKE '%' || #{keyword} || '%'</if>
+	         <if test="searchType == 'content'.toString()">AND NOTICE_CONTENT LIKE '%' || #{keyword} || '%'</if>
+	      </if>
+	   </sql>
+
+		<select id="selectNoticeCount" parameterType="hashmap" resultType="int"> 
+			<![CDATA[
+				SELECT COUNT(NOTICE_NUM) NOTICE_COUNT
+				FROM NOTICE
+				WHERE NOTICE_DEL_GB = 'N'
+			]]>
+				<include refid="noticeSearch"></include>
+		</select>
+
+
+		
+		<insert id="insertNotice" parameterType="hashmap">
+			<![CDATA[
+		INSERT INTO NOTICE
+			(
+			NOTICE_NUM,
+			NOTICE_TITLE,
+			NOTICE_CONTENT,
+			NOTICE_DATE
+			)
+		VALUES(
+			NOTICE_SEQ.NEXTVAL,
+			#{NOTICE_TITLE},
+			#{NOTICE_CONTENT},
+			SYSDATE
+			)	
+			]]>
+		</insert>
+
+		<select id="selectNoticeDetail" parameterType="hashmap" resultType="hashmap">
+			<![CDATA[
+				SELECT
+						NOTICE_NUM,
+						NOTICE_TITLE,
+						TO_CHAR(NOTICE_DATE, 'YYYY.MM.DD') AS NOTICE_DATE,
+						TO_CHAR(NOTICE_DATE, 'HH24:MI:SS') AS NOTICE_TIME,
+						NOTICE_CONTENT
+				FROM NOTICE
+				WHERE NOTICE_NUM = #{NOTICE_NUM}
+					AND NOTICE_DEL_GB='N'
+			]]>
+		</select>
+
+		<update id="updateNoticeModify" parameterType="hashmap">
+		<![CDATA[
+			UPDATE NOTICE
+			SET
+				NOTICE_TITLE = #{NOTICE_TITLE},
+				NOTICE_CONTENT = #{NOTICE_CONTENT}
+			WHERE NOTICE_NUM=#{NOTICE_NUM}
+			AND NOTICE_DEL_GB='N'
+		]]>
+		</update>
+
+		<update id="deleteNotice" parameterType="hashmap">
+			<![CDATA[
+				UPDATE NOTICE
+				SET NOTICE_DEL_GB = 'Y'
+				WHERE NOTICE_NUM = #{NOTICE_NUM}
+			]]>
+		</update>
+		
+		<select id="selectTotalGoodsList" parameterType="hashmap" resultType="hashmap">
+			<![CDATA[
+			SELECT *
+			FROM
+				(SELECT
+					ROW_NUMBER() OVER (ORDER BY TOTAL_GOODS_NUM DESC) AS NUM,
+				    TG.TOTAL_GOODS_NUM,
+				    TG.TOTAL_GOODS_NAME,
+				    TG.TOTAL_GOODS_MODEL,
+				    TG.TOTAL_GOODS_PRICE,
+				    B.BRAND_NAME,
+				    GI.GOODS_IMAGE_STD
+				FROM
+				    TOTAL_GOODS TG, BRAND B, GOODS_IMAGE GI
+				WHERE
+				    TG.TOTAL_GOODS_BRAND = B.BRAND_NUM
+				    AND TG.TOTAL_GOODS_NUM = GI.GOODS_IMAGE_PARENT
+				    AND TG.TOTAL_GOODS_DEL_GB = 'N'
+				    AND GI.GOODS_IMAGE_ORDER = 1
+				    ]]><include refid="searchGoods"></include><![CDATA[
+				    )
+			WHERE NUM BETWEEN #{START} AND #{END}
+			]]>
+		</select>
+		
+		<select id="selectTotalGoodsListCount" parameterType="hashmap" resultType="int">
+			<![CDATA[
+				SELECT
+				    COUNT(*)
+				FROM
+				    TOTAL_GOODS TG, BRAND B, GOODS_IMAGE GI
+				WHERE
+				    TG.TOTAL_GOODS_BRAND = B.BRAND_NUM
+				    AND TG.TOTAL_GOODS_NUM = GI.GOODS_IMAGE_PARENT
+				    AND TG.TOTAL_GOODS_DEL_GB = 'N'
+				    AND GI.GOODS_IMAGE_ORDER = 1
+				    ]]><include refid="searchGoods"></include><![CDATA[
+				    
+			]]>
+		</select>
+		
+		<sql id="searchGoods">
+			<if test='searchType == "전체" and keyword != ""'>
+				AND (UPPER(TG.TOTAL_GOODS_NAME) like UPPER('%' || #{keyword} ||'%') OR UPPER(TG.TOTAL_GOODS_NAME) like UPPER('%' || #{keyword} ||'%') OR UPPER(B.BRAND_NAME) like UPPER('%' || #{keyword} ||'%'))
+			</if>
+			<if test='searchType == "상품명" and keyword != ""'>
+				  AND UPPER(TG.TOTAL_GOODS_NAME) like UPPER('%' || #{keyword} ||'%')
+			</if>
+			<if test='searchType == "모델 번호" and keyword != ""'>
+				  AND UPPER(TG.TOTAL_GOODS_MODEL) like UPPER('%' || #{keyword} ||'%')
+			</if>
+			<if test='searchType == "브랜드명" and keyword != ""'>
+				  AND UPPER(B.BRAND_NAME) like UPPER('%' || #{keyword} ||'%')
+			</if>
+		</sql>
+
+		<update id="deleteGoods" parameterType="hashmap">
+		<![CDATA[
+			UPDATE TOTAL_GOODS
+			SET TOTAL_GOODS_DEL_GB = 'Y'
+			WHERE TOTAL_GOODS_NUM = #{TOTAL_GOODS_NUM}
+		]]>	
+		</update>
+		
+		<update id="deleteGoodsImage" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GOODS_IMAGE
+			SET  GOODS_IMAGE_DEL_GB = 'Y'
+			WHERE GOODS_IMAGE_PARENT = #{TOTAL_GOODS_NUM}
+		]]>	
+		</update>
+</mapper>

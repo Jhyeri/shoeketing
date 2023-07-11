@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="brandPage">
+
+	<!-- 브랜드 기본정보 조회 (브랜드 메인페이지랑 브랜드 기본정보 수정폼에서 사용) -->
+	<select id="selectBrandInfo" parameterType="hashmap" resultType="hashmap"> 
+	    <![CDATA[
+        	SELECT
+                  BRAND_NUM,
+                  BRAND_ID,
+                  BRAND_NAME,
+                  BRAND_INFO,
+                  BRAND_BUSINESS_NUM,
+                  BRAND_ADD,
+                  BRAND_LOGO_FILE
+	        FROM BRAND
+	        WHERE BRAND_NUM = #{BRAND_NUM}
+	        AND BRAND_DEL_GB = 'N'
+	    ]]>
+	</select>
+	
+	<!-- 브랜드관 정보 조회 -->
+	<select id="selectBrandPageInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+        	SELECT
+        		  BRAND_NAME,
+        		  BRAND_INFO,
+                  BRAND_LOGO_FILE
+	        FROM BRAND
+	        WHERE BRAND_NUM = #{BRAND_NUM}
+	        AND BRAND_DEL_GB = 'N'
+	    ]]>
+	</select>
+	
+	<!-- 브랜드 기본정보 수정 (수정 가능한 것 : 비밀번호, 등록지 주소, 브랜드 로고파일, 브랜드 소개말) -->
+	<update id="updateBrandInfo" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BRAND
+			SET    BRAND_PW = #{BRAND_PW},
+		           BRAND_ADD = #{BRAND_ADD},
+		           BRAND_LOGO_FILE = #{BRAND_LOGO_FILE},
+		           BRAND_INFO = #{BRAND_INFO}
+			WHERE BRAND_NUM = #{BRAND_NUM}
+			AND BRAND_DEL_GB = 'N'
+		]]>
+	</update>
+	
+	<!-- 브랜드 입점 매장 리스트(5줄) -->
+	<select id="selectShopList" parameterType="hashmap" resultType="hashmap"> 
+			<![CDATA[
+		        SELECT *
+		        FROM (SELECT 
+	                            ROW_NUMBER() OVER (ORDER BY SHOP_NUM DESC) AS NUM,
+	                            SHOP_NUM,
+	                            SHOP_BRAND,
+	                            SHOP_NAME,
+	                            SHOP_TEL,
+	                            SHOP_ADD,
+	                            SHOP_POS1,
+	                            SHOP_POS2,
+	                            SHOP_START_TIME,
+	                            SHOP_END_TIME
+		                  FROM
+		                        SHOP
+		                  WHERE SHOP_DEL_GB = 'N'
+		                  AND SHOP_JOIN_APPROVE = 'Y'
+		                  AND SHOP_BRAND = #{BRAND_NAME})
+		        WHERE NUM BETWEEN #{START} AND #{END}
+	        ]]>
+	</select>
+	
+	<!-- 브랜드 입점 매장 토탈 개수 -->
+	<select id="selectShopCount" parameterType="hashmap" resultType="int"> 
+	    <![CDATA[
+	        SELECT COUNT(SHOP_NUM) SHOP_COUNT
+	        FROM SHOP
+	        WHERE SHOP_DEL_GB = 'N'
+	        AND SHOP_JOIN_APPROVE = 'Y'
+	        AND SHOP_BRAND = #{BRAND_NAME}
+	    ]]>
+	</select>
+	
+	<!-- 브랜드 매장 입점 요청 리스트 = 매장 가입 승인 리스트(아직 승인 전)  -->
+	<select id="selectRequestShopList" parameterType="hashmap" resultType="hashmap"> 
+	    <![CDATA[
+	     	SELECT *
+	      	FROM (SELECT 
+	                    ROW_NUMBER() OVER (ORDER BY SHOP_NUM DESC) AS NUM,
+	                    SHOP_NUM,
+	                    SHOP_BRAND,
+	                    SHOP_NAME,
+	                    SHOP_TEL,
+	                    SHOP_ADD,
+	                    SHOP_START_TIME,
+	                    SHOP_END_TIME
+	                 FROM
+	                    SHOP
+	                 WHERE  SHOP_JOIN_APPROVE = 'N'
+	                 AND SHOP_DEL_GB = 'N'
+	                 AND SHOP_BRAND = #{BRAND_NAME})
+	        WHERE NUM BETWEEN #{START} AND #{END} 
+	    ]]>
+	</select>
+	
+	<!-- 브랜드 입점 요청 매장 토탈 개수 (아직 승인 전) -->
+	<select id="selectRequestShopCount" parameterType="hashmap" resultType="int"> 
+	    <![CDATA[
+	        SELECT COUNT(SHOP_NUM)
+	        FROM SHOP
+	        WHERE SHOP_JOIN_APPROVE = 'N'
+	        AND SHOP_BRAND = #{BRAND_NAME}
+	    ]]>
+	</select>        
+	
+	<!-- 브랜드 매장 입점 요청 승인 (입점 승인할 경우, 매장 가입 승인여부를 Y로 변경) 
+	      해당 브랜드의 전체 상품이 해당 매장의 상품으로 자동등록되는 트리거 동작 -->
+	<update id="updateShopJoinApprove" parameterType="hashmap">
+		<![CDATA[
+	        UPDATE SHOP
+	        SET SHOP_JOIN_APPROVE = 'Y'
+	        WHERE SHOP_NUM = #{SHOP_NUM}
+	    ]]>
+	</update>
+	
+	<!-- 트리거 (insertShopGoodsApprove) -->
+	<!-- create or replace TRIGGER insertShopGoodsApprove
+	AFTER UPDATE
+	ON SHOP
+	FOR EACH ROW
+	WHEN (new.SHOP_JOIN_APPROVE = 'Y')
+	declare
+	    goodsDetail1 goods_detail%rowtype;
+	   
+	        cursor c1 is select 
+	        GD.goods_detail_num, GD.goods_detail_size
+	    from
+	        goods_detail GD, total_goods TG, brand B
+	    where 
+	        GD.goods_detail_num = TG.total_goods_num
+	    and TG.total_goods_brand = B.brand_num
+	    AND B.brand_name = :new.shop_brand; 
+	    
+	begin
+	    open c1;  
+	    
+	    loop
+	        fetch c1 into goodsDetail1.goods_detail_num, goodsDetail1.goods_detail_size; 
+	        exit when c1%notfound; 
+	        insert into shop_goods(shop_goods_shop_num, 
+                                   shop_goods_goods_num, 
+                                   shop_goods_size) 
+	        values(:new.shop_num,
+	               goodsDetail1.goods_detail_num,
+	               goodsDetail1.goods_detail_size);
+	    end loop;
+	end;
+	/ -->
+	
+	
+	<!-- 브랜드 매장 입점 요청 거부 (입점 거부할 경우, 매장 탈퇴 여부를 Y로 변경) -->
+	<update id="updateShopJoinReject" parameterType="hashmap">
+		<![CDATA[
+	        UPDATE SHOP
+	        SET SHOP_DEL_GB = 'Y'
+	        WHERE SHOP_NUM = #{SHOP_NUM}
+	        AND SHOP_JOIN_APPROVE = 'N'
+	    ]]>
+	</update>   
+	
+	<!-- 브랜드가 입점한 매장 삭제(탈퇴)시킬 경우, 매장 상품 테이블의 해당 매장 상품들까지 모두 삭제  -->
+	<!-- 트리거 (delete_shop_goods) -->
+	<!-- 
+		 CREATE OR REPLACE TRIGGER delete_shop_goods
+		 AFTER UPDATE
+	  	 ON SHOP
+		 FOR EACH ROW
+		 WHEN (new.SHOP_DEL_GB = 'Y')
+		 BEGIN
+		            DELETE
+		            FROM SHOP_GOODS
+		            WHERE SHOP_GOODS_SHOP_NUM = :new.SHOP_NUM;
+		 END;
+	     / 
+	-->
+	<update id="deleteShop" parameterType="hashmap">
+	    <![CDATA[
+	        UPDATE SHOP
+	        SET SHOP_DEL_GB = 'Y'
+	        WHERE SHOP_NUM = #{SHOP_NUM}
+	        AND SHOP_JOIN_APPROVE = 'Y'
+	    ]]>
+	</update>
+	
+	
+	<!-- 브랜드 입점 / 입점 요청 매장 위치 조회 -->
+	<select id="selectShopLocationInfo" parameterType="hashmap" resultType="hashmap"> 
+	    <![CDATA[
+            SELECT 
+            		SHOP_NAME,
+                       SHOP_NUM,
+                       SHOP_BRAND,
+                       SHOP_TEL,
+                       SHOP_ADD,
+                       SHOP_POS1,
+                       SHOP_POS2,
+                       SHOP_START_TIME,
+                       SHOP_END_TIME
+            FROM SHOP
+            WHERE SHOP_DEL_GB = 'N'
+            AND SHOP_NUM = #{SHOP_NUM}
+	    ]]>
+	</select>
+
+	<!-- 브랜드관 상품 썸네일 이미지 조회 (image order 1인 이미지파일) -->
+	<select id="selectGoodsThumbnail" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT
+					GOODS_IMAGE_NUM,
+					GOODS_IMAGE_ORG,
+					GOODS_IMAGE_STD
+			FROM GOODS_IMAGE
+			WHERE GOODS_IMAGE_PARENT = #{TOTAL_GOODS_NUM}
+			AND GOODS_IMAGE_DEL_GB = 'N'
+			AND GOODS_IMAGE_ORDER = 1
+		]]>
+	</select>
+	
+	<!-- 브랜드관 최신 상품 조회 (최신 상품 5개) -->
+	<select id="selectNewGoodsList" parameterType="hashmap" resultType="hashmap"> 
+		<![CDATA[
+			SELECT
+					/*+ INDEX_DESC(TOTAL_GOODS PK_TOTAL_GOODS) */ ROWNUM RNUM,
+					TOTAL_GOODS_NUM,
+					TOTAL_GOODS_BRAND,
+					TOTAL_GOODS_NAME,
+					TOTAL_GOODS_MODEL,
+					TOTAL_GOODS_PRICE,
+					TOTAL_GOODS_DEL_GB
+			FROM TOTAL_GOODS
+			WHERE ROWNUM <= 5
+			AND TOTAL_GOODS_DEL_GB = 'N'
+			AND TOTAL_GOODS_BRAND = #{BRAND_NUM}
+		]]>
+	</select>
+
+	
+	<!-- 브랜드관 랭킹 5인 상품(인기상품 5개) 조회 -->
+	<!-- 인기순(찜순)으로 상품 정렬하는데, 찜하기 개수가 같을경우에는 상품 최신 등록순으로 정렬 -->
+	<select id="selectGoodsRankingList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT *
+			FROM 
+		        (SELECT 
+	                    ROW_NUMBER() OVER (ORDER BY TOTAL_GOODS_LIKE_COUNT DESC) AS NUM,
+	                    TOTAL_GOODS_NUM,
+	                    TOTAL_GOODS_NAME,
+	                    TOTAL_GOODS_MODEL,
+	                    TOTAL_GOODS_PRICE,
+	                    TOTAL_GOODS_LIKE_COUNT
+		        FROM TOTAL_GOODS
+		        WHERE TOTAL_GOODS_BRAND = #{BRAND_NUM}
+		        AND TOTAL_GOODS_DEL_GB = 'N'
+		        ORDER BY TOTAL_GOODS_LIKE_COUNT DESC, TOTAL_GOODS_NUM DESC)
+			WHERE NUM BETWEEN 1 AND 5
+		]]>
+	</select>
+
+</mapper>
