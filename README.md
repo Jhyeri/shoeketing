@@ -9,6 +9,7 @@
 
 </br>
 
+
 ## 2. 프로젝트에 사용된 기술
 #### `Back-end`
   - Java (JDK 11)
@@ -44,10 +45,17 @@
 </br>
 
 ## 3. ERD 설계
- <img width="90%" src="https://github.com/Jhyeri/shoeketingtmp/assets/111175466/20769571-5bb0-4b1a-840d-ffad19ca6be6"/>
+ <img width="60%" src="https://github.com/Jhyeri/shoeketingtmp/assets/111175466/20769571-5bb0-4b1a-840d-ffad19ca6be6"/>
 
 ## 4. 프로젝트의 핵심 기능  
-- 회원의 종류별로 핵심기능을 구성하였습니다.
+- **일반회원**
+  - 실시간으로 브랜드/상품/사이즈/매장에 따라 신발 재고를 확인 할 수 있습니다.
+  - 원하는 제품에 대한 픽업 예약 기능을 제공합니다.
+- **매장회원**
+  - 매장에서 보유하고 있는 상품에 대한 픽업 예약 관리와 재고 관리 기능을 제공합니다.
+- **브랜드회원**
+  - 해당 브랜드 상품의 등록, 수정, 삭제 기능과 새로운 매장의 입점 요청 관리 기능을 제공합니다.
+
 
 <details>
 <summary><b> 핵심기능 설명 펼치기</b></summary>
@@ -56,52 +64,94 @@
 ### [일반회원]
   
 #### 4.1. 신발 재고 수량 및 매장 위치 확인
-- **매장 위치 조회** :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/goods/search/stockSearchForm.jsp)
+- **매장 위치 조회** :pushpin: [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/goods/search/stockSearchForm.jsp)
   - 카카오 Maps API를 통해 매장 위치를 조회할 수 있습니다.
-- **재고 수량 조회** :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/controller/StockController.java)
-  - 브랜드/상품명/사이즈/매장별로 신발 재고 수량을 조회할 수 있습니다.
-  - :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/service/StockServiceImpl.java)
+- **재고 수량 조회** :pushpin: [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/java/sk/item/controller/StockController.java)
+  - 브랜드/상품명/사이즈/매장별로 신발 재고 수량을 조회할 수 있습니다. :pushpin: [Service 코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/java/sk/item/service/StockServiceImpl.java)
+<br/>
 
 #### 4.2. 토스페이먼츠 결제
   - 상품 픽업 날짜를 지정하고 토스페이먼츠로 예약금 결제 기능을 제공합니다.
-  - **날짜 지정** :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/goods/search/stockSearchForm.jsp)
-  - **토스페이먼츠 결제** :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/controller/TossPaymentsController.java)
+  - **날짜 지정** :pushpin: [JSP코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/goods/search/stockSearchForm.jsp)
+  - **토스페이먼츠 결제** :pushpin: [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/java/sk/item/controller/TossPaymentsController.java)
   
 #### 4.3. 장바구니에서 픽업예약 
   - 장바구니에서 상품별로 빠르게 픽업예약을 진행할 수 있습니다.
-  - :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp)
-  - :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/controller/BasketController.java)
-  - :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/service/BasketServiceImpl.java)
+    <details>
+    <summary><b>📌 코드 확인</b></summary>
+    <div markdown="1">
+  
+    - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp)
+    - [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/java/sk/item/controller/BasketController.java)
+    </div>
+    </details>
+
 
 ### [매장회원]
 
 #### 4.4. 재고 수량 관리
   - 매장에서 보유하고 있는 상품의 재고 수량을 관리할 수 있습니다.
-  - :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/shop/shopPage/stock/stockList.jsp)
-  - :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/controller/StockController.java)
-  - :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/service/StockServiceImpl.java)
+
+    <details>
+    <summary><b>📌 코드 확인</b></summary>
+    <div markdown="1">
+  
+    - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/shop/shopPage/stock/stockList.jsp)
+    - [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/java/sk/item/controller/StockController.java)
+    - [Service 코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/java/sk/item/service/StockServiceImpl.java)
+
+    </div>
+    </details>
+ 
 
 #### 4.5. 요청 픽업예약 관리
   - 매장에 요청된 픽업 예약을 승인/거부/취소가 가능합니다.
-  - :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/shop/shopPage/reservation/reservationRequestList.jsp)
-  - :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/controller/ReservationController.java)
-  - :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/service/ReservationServiceImpl.java)
+     <details>
+    <summary><b>📌 코드 확인</b></summary>
+    <div markdown="1">
+  
+    - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/shop/shopPage/reservation/reservationRequestList.jsp)
+    - [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/java/sk/item/controller/ReservationController.java)
+    - [Service 코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/java/sk/item/service/ReservationServiceImpl.java)
+
+    </div>
+    </details>
 
 
 ### [브랜드회원]
   
 #### 4.6. 상품 등록 및 수정, 삭제
 - 해당 브랜드의 상품을 등록/수정/삭제할 수 있습니다.
-- :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/brand/goods/goodsList.jsp)
-- :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/controller/ReservationController.java)
-- :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/service/ReservationServiceImpl.java) 
+     <details>
+    <summary><b>📌 코드 확인</b></summary>
+    <div markdown="1">
+  
+    - [상품 목록 JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/brand/goods/goodsList.jsp)
+    - [등록 폼 JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/brand/goods/goodsWriteForm.jsp)
+    - [Controller](https://github.com/Jhyeri/shoeketing/blob/master/SK/src/main/java/sk/item/controller/GoodsController.java)
+    - [Service 코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/service/GoodsServiceImpl.java)
+
+    </div>
+    </details>
+ 
  
 #### 4.7. 매장 입점 요청 관리
 - 브랜드 지점을 해당 사이트에 등록/삭제할 수 있습니다.
-- :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/brand/goods/goodsList.jsp)
-- :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/controller/ReservationController.java)
-- :pushpin: [코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/service/ReservationServiceImpl.java) 
+
+    <details>
+    <summary><b>📌 코드 확인</b></summary>
+    <div markdown="1">
+  
+    - [JSP 코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/webapp/WEB-INF/views/shop/shopPage/reservation/reservationRequestList.jsp)
+    - [Controller코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/controller/ReservationController.java)
+    - [Service 코드 확인](https://github.com/taek-s/shoeketing/blob/master/SK/src/main/java/sk/item/service/ReservationServiceImpl.java
+)
+    </div>
+    </details>
  
+</div>
+</details>
+
 </div>
 </details>
 
