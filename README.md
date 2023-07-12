@@ -172,17 +172,18 @@
 
 ### 5.1. 마이페이지
   - **회원정보 수정**
-    - 📌 [수정 폼 코드 확인]()
-    - 📌 [수정 처리 코드 확인]()
+    - 📌 [수정 폼 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L51)
+    - 📌 [수정 처리 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L77)
   
   - **회원탈퇴**
-    - 탈퇴 전, 비밀번호를 확인합니다. 📌 [코드 확인]()
-    - 비밀번호가 일치하면 회원의 삭제여부를 'Y'로 변경하여 탈퇴처리합니다. 📌 [코드 확인]()
+    - 탈퇴 전, 비밀번호와 회원의 탈퇴가능여부를 확인합니다. 📌 [코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L109)
+    - 비밀번호가 일치하면 회원의 삭제여부를 'Y'로 변경하여 탈퇴처리합니다. 📌 [코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L148)
   
 ### 5.2. 찜 목록
   - **찜 목록** 📌[코드 확인]()
   
   - **찜 취소** 📌[코드 확인]()
+    - 상품의 썸네일을 클릭하면 찜 목록에서 삭제할 수 있습니다.
   
 ### 5.3. 문의내역
   - **나의 문의 내역 조회** 📌[코드 확인]()
@@ -204,13 +205,14 @@
   - **상품 삭제**
     - 상품별로 삭제가 가능하며, 여러개의 상품을 한꺼번에 삭제하는 전체삭제 기능도 제공합니다. 📌[코드 확인]()
   - **픽업예약**
-    - 상품별로 원하는 날짜를 지정하여 픽업예약과 결제까지 가능합니다. 📌[JSP코드 확인]()
+    - 상품별로 원하는 날짜를 지정하여 픽업예약과 결제가 한 번에 가능합니다.
       <details>
       <summary><b>📌 코드 확인</b></summary>
       <div markdown="1">
     
-      - [JSP 코드 확인]()
-      - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/SK/src/main/java/sk/item/controller/ReservationController.java)
+      - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp)
+      - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/TossPaymentsController.java)
+
       </div>
       </details>
  ###
