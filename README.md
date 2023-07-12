@@ -64,10 +64,10 @@
 ### [일반회원]
   
 #### 4.1. 신발 재고 수량 및 매장 위치 확인
-- **매장 위치 조회** :pushpin: [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/SK/src/main/webapp/WEB-INF/views/goods/search/stockSearchForm.jsp)
+- **매장 위치 조회** :pushpin: [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/goods/search/stockSearchForm.jsp)
   - 카카오 Maps API를 통해 매장 위치를 조회할 수 있습니다.
-- **재고 수량 조회** :pushpin: [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/SK/src/main/java/sk/item/controller/StockController.java)
-  - 브랜드/상품명/사이즈/매장별로 신발 재고 수량을 조회할 수 있습니다. :pushpin: [Service 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/SK/src/main/java/sk/item/service/StockServiceImpl.java)
+- **재고 수량 조회** :pushpin: [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/StockController.java)
+  - 브랜드/상품명/사이즈/매장별로 신발 재고 수량을 조회할 수 있습니다. :pushpin: [Service 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/service/StockServiceImpl.java)
 <br/>
 
 #### 4.2. 토스페이먼츠 결제
