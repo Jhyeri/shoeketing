@@ -172,9 +172,15 @@
 
 ### 5.1. 마이페이지
   - **회원정보 수정**
-    - 📌 [수정 폼 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L51)
-    - 📌 [수정 처리 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L77)
+    <details>
+    <summary><b>📌 코드 확인</b></summary>
+    <div markdown="1">
   
+    - [JSP 코드 확인하기](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L51)
+    - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L77)
+
+    </div>
+    </details>
   - **회원탈퇴**
     - 탈퇴 전, 비밀번호와 회원의 탈퇴가능여부를 확인합니다. 📌 [코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L109)
     - 비밀번호가 일치하면 회원의 삭제여부를 'Y'로 변경하여 탈퇴처리합니다. 📌 [코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L148)
