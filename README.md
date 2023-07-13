@@ -242,19 +242,13 @@
 ### 5.5. 장바구니
   - **장바구니 목록 조회** 📌[코드 확인]()
   - **상품 삭제**
-    - 상품별로 삭제가 가능하며, 여러개의 상품을 한꺼번에 삭제하는 전체삭제 기능도 제공합니다. 📌[코드 확인]()
-  - **픽업예약**
-    - 상품별로 원하는 날짜를 지정하여 픽업예약과 결제가 한 번에 가능합니다.
-      <details>
-      <summary><b>📌 코드 확인</b></summary>
-      <div markdown="1">
+    - 하나의 상품만 삭제하거나, 여러개의 상품을 삭제하는 전체삭제 기능도 제공합니다.📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L10)
     
-      - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp)
-      - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/TossPaymentsController.java)
+  - **픽업예약**
+    - 상품별로 원하는 날짜를 지정하여 픽업예약과 결제를 진행할 수 있습니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/TossPaymentsController.java)
+    - **픽업예약** 버튼을 통해 하나의 상품만 예약할 수 있습니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L48)
+    - **선택예약** 버튼을 통해 최대 5개의 상품까지 한 번에 예약과 결제가 가능합니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L447)
 
-      </div>
-      </details>
- ###
 </div>
 </details>
 
