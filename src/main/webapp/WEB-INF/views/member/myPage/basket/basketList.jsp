@@ -87,9 +87,9 @@ function fn_paymentone(name, model, shopName, size, num, shopNum, date) { //개�
 	const customerKey = 'user123'; 
 	const paymentWidget = PaymentWidget(clientKey, customerKey);  // 결제위젯 초기화
 	
-	let max = "${orderId}";
+	let max = "${orderId}"; //가장 최신의 주문번호를 가져옴
 
-	let orderId = Number(max) + 127;
+	let orderId = Number(max) + 124; //새로운 주문번호 생성
 	
 	var goodsNum = num;
 	var goodsName = name;
@@ -107,7 +107,7 @@ function fn_paymentone(name, model, shopName, size, num, shopNum, date) { //개�
 	}
   	
   	paymentWidget.requestPayment({
-    	  orderId: orderId,   // selectKey로 max 예약번호 가져와서 가져다쓰기!!!!! 구현필요
+    	  orderId: orderId, 
     	  orderName: name,
     	  successUrl: 'http://localhost:8080/sk/tossPaymentsSuccess?goodsNum=' + goodsNum + '&shopNum=' + shopNum + '&goodsSize=' + goodsSize + '&pickupDate=' + pickupDate,
     	  failUrl: 'http://localhost:8080/sk',
@@ -256,7 +256,7 @@ function fn_paymentone(name, model, shopName, size, num, shopNum, date) { //개�
 	              style="width: 5rem"
 	              name="pickup"
 	              id="pickup"
-	              onclick="fn_pickupDateone('${basket.TOTAL_GOODS_NAME}', '${basket.TOTAL_GOODS_MODEL}', '${basket.SHOP_NAME}', '${basket.BASKET_SIZE}', '${basket.BASKET_NUM}', '${basket.SHOP_NUM}');"
+	              onclick="fn_pickupDateone('${basket.TOTAL_GOODS_NAME}', '${basket.TOTAL_GOODS_MODEL}', '${basket.SHOP_NAME}', '${basket.BASKET_SIZE}', '${basket.TOTAL_GOODS_NUM}', '${basket.SHOP_NUM}');"
 	            >
 	              픽업예약
 	            </button>
@@ -373,7 +373,7 @@ $(document).ready(function() {
 	
 	$("a[id='goodsName']").on("click", function(e) { //상품명을 클릭하면 상품 상세보기 이동
 		 e.preventDefault();
-		const goodsNum = $("input[name='chk']").attr("data-num");
+		let goodsNum = $("input[name='chk']").attr("data-num");
 		location.href="/sk/goods/goodsDetail?TOTAL_GOODS_NUM="+goodsNum;
 	});
 	
@@ -385,7 +385,7 @@ $(document).ready(function() {
 	
 });
 
-//https://ivory-room.tistory.com/67
+
 function checkAll() { //전체 체크 함수
 	if($("#selectAll").is(':checked')) { //체크되어있으면
 		$("input[name=chk]").prop("checked", true);
@@ -460,7 +460,6 @@ function fn_pickupDates() {
 		//체크된 개수를 파악하기 위한 반복문
 		for(var i=0; i<chks.length; i++) { //전체 체크박스 개수만큼 반복
 			chk = chks[i]; //체크박스 하나를 변수에 저장
-			//chktrue = chk.checked;
 			
 			if(chk.checked) { //체크 되어있으면
 				chksChecked ++; //체크 개수 1 증가
@@ -519,9 +518,9 @@ function fn_pickupDates() {
 							 pickupInfo.push(pickupInfoObj);
 							 //객체의 인덱스가 비어있는 현상을 방지하기 위해 객체를 배열에 push하여 비어있는 인덱스가 없도록 함
 						
-					} //if문
+					} //if문 end
 					
-				} //for문
+				} //for문 end
 								   	
 					$("#pickupDateModal").modal("show");
 					//모달이 자동으로 띄워지는 속성을 사용했을 때, confirm창에서 아니오를 선택해도
@@ -570,7 +569,7 @@ function fn_payment(finalInfo) { //여러개 결제 진행
 	const paymentWidget = PaymentWidget(clientKey, customerKey);  // 결제위젯 초기화
 	
 		let price = null;
-		let amount = finalInfo.length;
+		let amount = finalInfo.length; //예약할 상품의 개수
 		let max = "${orderId}";
 
 		let orderId = Number(max) + 124;
@@ -584,7 +583,6 @@ function fn_payment(finalInfo) { //여러개 결제 진행
 			let shopNum = i.shopNum;
 			let goodsSize = i.goodsSize;
 			let pickupDate = i.pickupDate;
-			
 			
 			json.goodsNum = goodsNum;
 			json.goodsName = goodsName;

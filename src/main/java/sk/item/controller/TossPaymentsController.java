@@ -91,8 +91,6 @@ public class TossPaymentsController {
 		ModelAndView mv = new ModelAndView("redirect:/tossPaymentsApproveBundle");   // 픽업 예약금 결제 승인으로 리다이렉트
 		
 		System.out.println("successBundle 파라미터 map : " + map);
-		
-    
 	      
 	    mv.addObject("paymentKey",  map.get("paymentKey"));
 	    mv.addObject("orderId",  map.get("orderId"));
@@ -276,7 +274,6 @@ public class TossPaymentsController {
 			if (responseCode == 200) { // 정상 호출일 경우 (응답코드 200)
 				
 				Map<String, Object> finalMap = new HashMap<>();
-				Map<Object, Object> orderIdMap = new HashMap<>();
 				List<String> orderIdList = new ArrayList<>();
 				
 				for(int i=0; i<reserveGoodsList.size(); i++) {
@@ -294,24 +291,16 @@ public class TossPaymentsController {
 					map.put("RESERVATION_PRONUM", finalMap.get("goodsNum"));
 					map.put("RESERVATION_SHOP_NUM", finalMap.get("shopNum"));
 					map.put("RESERVATION_SIZE", finalMap.get("goodsSize"));
-//					mv.addObject("orderId", map.get("orderId"));
 					
-					// insertReservation 호출 (추후 실시간 재고검색 기능 구현후 주석 풀기)
+					// insertReservation 호출 
 					// 예약 insert 하는 과정
 					Map<String, Object> reservationResult = reservationService.insertReservation(map, session);
+					System.out.println("reservationResult : " + reservationResult);
 					
-					
-//					orderIdMap.put("orderId", reservationResult.get("RESERVATION_NUM"));
 					//max 주문번호 가져오기
 					String maxOrderId = String.valueOf(reservationService.selectOrderId(map));
-//					orderIdMap.put("orderId"+i, maxOrderId);
-//					mv.addObject("orderId"+i, maxOrderId);
 					orderIdList.add(maxOrderId);
-					
-					System.out.println("reservationResult 결과 : " + reservationResult);
-					
 				}
-				System.out.println("orderIdList : " + orderIdList);
 				
 				mv.addObject("paymentKey", map.get("paymentKey"));
 				

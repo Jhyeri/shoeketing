@@ -44,7 +44,6 @@ public class CommonService {
 
 	// 여러개의 회원정보를 가져올 때 사용
 	public Map<String, Object> getSessions(HttpSession session, String[] keys) throws Exception {
-//			String info = "";
 		Map<String, Object> infoMap = new HashMap<>();
 		Map<String, Object> sessionMap = (Map<String, Object>) session.getAttribute("session_MEM_INFO");
 

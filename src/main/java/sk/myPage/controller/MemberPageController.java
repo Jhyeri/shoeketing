@@ -77,7 +77,6 @@ public class MemberPageController {
 	public void accountModify(@RequestParam(value="agreeCheck", required=false) boolean check, @RequestParam Map<String, Object> map) throws Exception {
 		log.debug("----------- 일반회원 회원정보 수정 처리 ----------");
 		
-	//	ModelAndView mv = new ModelAndView("redirect:/myPage");
 		
 		//알림 동의 체크박스
 		if(check) { //체크했으면
@@ -86,11 +85,8 @@ public class MemberPageController {
 			map.put("MEM_INFORM_AGREE", "N");
 		}
 		
-		System.out.println("수정처리 파라미터 : " + map);
-		
 		memberPageService.accountModify(map);
 		
-		//return mv;
 	}
 
 	//회원 탈퇴 폼
@@ -147,7 +143,6 @@ public class MemberPageController {
 	@RequestMapping(value="/myPage/accountDelete")
 	public void accountDelete(HttpSession session) throws Exception {
 		log.debug("----------- 일반회원 회원 탈퇴 처리 ----------");
-	//	ModelAndView mv = new ModelAndView("redirect:/main");
 		Map<String, Object> map= new HashMap<>();
 			
 		if(session != null) {
@@ -155,7 +150,6 @@ public class MemberPageController {
 			memberPageService.deleteAccount(map); //탈퇴 처리
 			session.invalidate();//탈퇴 후 로그아웃 처리
 		}
-	//	return mv;
 	}
 	
 	//찜목록 (빈 JSP 사용)
