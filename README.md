@@ -185,7 +185,8 @@
   - **회원탈퇴**
     - 탈퇴 전, 비밀번호와 회원의 탈퇴가능여부를 확인합니다. 📌 [코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L109)
     - 비밀번호가 일치하면 회원의 삭제여부를 'Y'로 변경하여 탈퇴처리합니다. 📌 [코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L148)
-  
+<br/>
+
 ### 5.2. 찜 목록
   - **찜 목록**
     - 찜한 상품을 조회할 수 있습니다.
@@ -210,7 +211,8 @@
 
     </div>
     </details> 
-    
+<br/>
+
 ### 5.3. 문의내역
   - **나의 문의 내역 조회** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/cs/controller/CSController.java#L49)
 
@@ -239,7 +241,8 @@
 
 </div>
 </details>
-    
+<br/>
+
 ### 5.5. 장바구니
   - **장바구니 목록 조회** 📌[코드 확인]()
   - **상품 삭제**
