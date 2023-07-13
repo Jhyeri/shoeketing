@@ -575,8 +575,6 @@ function fn_payment(finalInfo) { //여러개 결제 진행
 
 		let orderId = Number(max) + 124;
 		
-		console.log("orderId : " + orderId);
-		
 		let jsonArray = [];
 		let json = new Object();
 		
@@ -610,7 +608,6 @@ function fn_payment(finalInfo) { //여러개 결제 진행
 		}
 		
 		var goodsInfo = JSON.stringify(jsonArray);
-		console.log(goodsInfo);
 		
 		let count = amount - 1;
 		
