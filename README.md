@@ -160,7 +160,7 @@
 ## 5. 담당한 부분
  - 회원정보 수정
  - 회원 탈퇴
- - 문의내역
+ - 리뷰 등록
  - 찜 목록
  - 픽업 예약 목록
  - 장바구니
@@ -181,27 +181,35 @@
   
 ### 5.2. 찜 목록
   - **찜 목록**
-    - 찜한 상품을 조회할 수 있습니다.<br/>
-    📌 [JSP 코드 확인하기](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp)<br/>
-    📌 [Controller 코드 확인하기](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java)
-
-  - **찜 취소**
-    - ajax 요청을 통해 상품의 썸네일을 클릭하면 찜 목록에서 삭제할 수 있습니다.
-  
-   <details>
+    - 찜한 상품을 조회할 수 있습니다.
+    <details>
     <summary><b>📌 코드 확인</b></summary>
     <div markdown="1">
   
-    - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp)
+    - [JSP 코드 확인하기](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp)
+    - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java)
+
+    </div>
+    </details>
+    
+  - **찜 취소**
+    - ajax 요청을 통해 상품의 썸네일을 클릭하면 찜 목록에서 삭제할 수 있습니다. 
+    <details>
+    <summary><b>📌 코드 확인</b></summary>
+    <div markdown="1">
+  
+    - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp#L62)
     - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L163)
 
-)
     </div>
     </details> 
+    
 ### 5.3. 문의내역
-  - **나의 문의 내역 조회** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csList.jsp)
-  - **문의글 상세보기** 
+  - **나의 문의 내역 조회** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/cs/controller/CSController.java#L49)
+
+  - **문의글 상세보기** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/cs/controller/CSController.java#L162)
     - 문의내역에서 함수를 호출하여 모달창으로 상세보기가 가능합니다.
+
   - **문의 작성**
     - 문의할 매장 찾기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L161)
       - **문의할 매장을 직접 지정**할 수 있습니다.
@@ -209,13 +217,22 @@
     - 글 등록하기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L192)
     - 글 삭제하기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L132)
   
-### 5.4. 픽업 예약 목록
-  - **나의 예약 목록 조회** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/reservation/reservationList.jsp)
-  - **예약내역 상세보기** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/reservation/reservationDetail.jsp)
-  - **리뷰 작성**
-    - 1회만 작성 가능하므로, 후기 등록 전에 리뷰 작성여부를 체크합니다. 📌[코드 확인]()
-    - 리뷰를 등록 처리 합니다. 📌[코드 확인]()
- 
+### 5.4. 리뷰 등록
+  - **리뷰 작성 이력 확인**
+    - 1회만 작성 가능하므로, 후기 등록 전에 리뷰 작성여부를 체크합니다.
+  
+  - **리뷰 등록**
+    - ajax 요청을 통해 리뷰를 등록 처리 합니다.
+<details>
+<summary><b>📌 코드 확인</b></summary>
+<div markdown="1">
+
+- [JSP 코드 확인하기](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/reservation/reservationList.jsp)
+- [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/review/controller/ReviewController.java)
+
+</div>
+</details>
+    
 ### 5.5. 장바구니
   - **장바구니 목록 조회** 📌[코드 확인]()
   - **상품 삭제**
