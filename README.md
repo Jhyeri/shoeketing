@@ -180,11 +180,24 @@
     - 비밀번호가 일치하면 회원의 삭제여부를 'Y'로 변경하여 탈퇴처리합니다. 📌 [코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L148)
   
 ### 5.2. 찜 목록
-  - **찜 목록** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp)
+  - **찜 목록**
+    - 찜한 상품을 조회할 수 있습니다.<br/>
+    📌 [JSP 코드 확인하기](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp)<br/>
+    📌 [Controller 코드 확인하기](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java)
+
+  - **찜 취소**
+    - ajax 요청을 통해 상품의 썸네일을 클릭하면 찜 목록에서 삭제할 수 있습니다.
   
-  - **찜 취소** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp#L62)
-    - 상품의 썸네일을 클릭하면 찜 목록에서 삭제할 수 있습니다.
+   <details>
+    <summary><b>📌 코드 확인</b></summary>
+    <div markdown="1">
   
+    - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp)
+    - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L163)
+
+)
+    </div>
+    </details> 
 ### 5.3. 문의내역
   - **나의 문의 내역 조회** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csList.jsp)
   - **문의글 상세보기** 
