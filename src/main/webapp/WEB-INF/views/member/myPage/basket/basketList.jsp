@@ -89,6 +89,10 @@ function fn_paymentone(name, model, shopName, size, num, shopNum, date) { //개�
 	
 	let max = "${orderId}"; //가장 최신의 주문번호를 가져옴
 
+	if(max == 0) {
+		max = 10000000;
+	}
+	
 	let orderId = Number(max) + 124; //새로운 주문번호 생성
 	
 	var goodsNum = num;
@@ -570,9 +574,13 @@ function fn_payment(finalInfo) { //여러개 결제 진행
 	
 		let price = null;
 		let amount = finalInfo.length; //예약할 상품의 개수
-		let max = "${orderId}";
+		let max = "${orderId}"; //가장 최신의 주문번호를 가져옴
 
-		let orderId = Number(max) + 124;
+		if(max == 0) {
+			max = 10000000;
+		}
+		
+		let orderId = Number(max) + 124; //새로운 주문번호 생성
 		
 		let jsonArray = [];
 		let json = new Object();
