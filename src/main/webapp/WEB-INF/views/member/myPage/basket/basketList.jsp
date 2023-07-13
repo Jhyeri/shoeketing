@@ -97,7 +97,7 @@ function fn_paymentone(name, model, shopName, size, num, shopNum, date) { //개�
 	var goodsSize = size;
 	var pickupDate = date;
 	
-	// 등급별 픽업 예약금
+	// 등급별 픽업 예약금 
 	if("<%=(String)session.getAttribute("session_MEM_GRADE")%>" === "골드"){
 		paymentWidget.renderPaymentMethods('#payment-method', 30000);
 	}else if("<%=(String)session.getAttribute("session_MEM_GRADE")%>" === "플래티넘"){

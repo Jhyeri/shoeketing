@@ -327,7 +327,7 @@ public class TossPaymentsController {
 	@PostMapping(value = "/tossPaymentsCancel")
 	public Map<String, Object> reservationCancel(@RequestParam Map<String, Object> map, HttpSession session) throws Exception {
 		log.debug("###### 픽업 예약금 결제 취소 ######");
-		log.debug("map 확인 : " + map);
+		log.debug("map 확인 : " + map); 
 		
 		int cancelAmount = 0;
 		

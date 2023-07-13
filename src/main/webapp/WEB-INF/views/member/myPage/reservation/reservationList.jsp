@@ -160,7 +160,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	// 페이지 로딩 시 자동으로 1페이지 가져오기
-	fn_selectReservationList(1);
+	fn_selectReservationList(1); 
 	
 	 var star = "";
 	 var size = "";

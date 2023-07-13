@@ -90,7 +90,7 @@
 
 $(document).ready(function() {
 	
-	fn_selectCSList(1);
+	fn_selectCSList(1); //페이지 로딩 시 1페이지 가져오기
 	
 	$("a[name='title']").on("click", function(e) { //목록에서 글 제목을 클릭하면
 		e.preventDefault();
@@ -109,7 +109,7 @@ $(document).ready(function() {
 });
 
 
-function detail(num) {
+function detail(num) { //글 상세보기
 	$.ajax({
 		url:"/sk/myPage/csDetail",
 		type:'post',
@@ -129,7 +129,7 @@ function detail(num) {
 }
 
 
-function deleteCS(num) {
+function deleteCS(num) { //글 삭제 함수
 	if(confirm("문의 글을 삭제하시겠습니까?")) {
 		$.ajax({
 		url:"/sk/myPage/csDelete",
@@ -159,9 +159,9 @@ function deleteCS(num) {
 		 comAjax.ajax();
 	}
 
-	function fn_selectCSListCallback(data) {
+	function fn_selectCSListCallback(data) { //선택한 페이지의 결과물을 보여줄 콜백함수
 		var total = data.TOTAL; //게시물의 개수 
-		var body = $("#csListTbody");
+		var body = $("#csListTbody"); //새로운 내용이 담길 부분
 		
 		body.empty();
 		

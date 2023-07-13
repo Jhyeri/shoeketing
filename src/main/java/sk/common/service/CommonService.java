@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 public class CommonService {
 
 	// session_MEM_INFO의 회원정보 가져오는 메소드
-	// 이메일, 비밀번호는 이미 별도로 세션영역에 저장해서 포함 안 했음
 
 	// 회원정보 하나만 가져오는 메소드
 	public String getSession(HttpSession session, String key) throws Exception {
