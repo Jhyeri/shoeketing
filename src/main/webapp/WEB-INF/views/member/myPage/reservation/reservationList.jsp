@@ -375,7 +375,6 @@ function fn_selectReservationListCallback(data){ // 페이지 선택 시 화면�
 				   str += "<br></td></tr>"
 		});
 		body.append(str);
-	
 	}
 }
 </script>
