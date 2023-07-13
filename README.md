@@ -164,7 +164,7 @@
  - 찜 목록
  - 픽업 예약 목록
  - 장바구니
-   - 픽업예약 및 토스 결제
+   - 픽업예약 및 토스페이먼츠 결제
 
 <details>
 <summary><b>담당 기능 설명 펼치기</b></summary>
@@ -245,9 +245,9 @@
     - 하나의 상품만 삭제하거나, 여러개의 상품을 삭제하는 전체삭제 기능도 제공합니다.📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L10)
     
   - **픽업예약**
-    - 상품별로 원하는 날짜를 지정하여 픽업예약과 결제를 진행할 수 있습니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/TossPaymentsController.java)
-    - **픽업예약** 버튼을 통해 하나의 상품만 예약할 수 있습니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L48)
-    - **선택예약** 버튼을 통해 최대 5개의 상품까지 한 번에 예약과 결제가 가능합니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L447)
+    - 상품별로 원하는 날짜를 지정하여 픽업예약 및 토스페이먼츠 결제를 진행할 수 있습니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/TossPaymentsController.java)
+    - **픽업예약** 버튼을 통해 하나의 상품만 예약 가능합니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L48)
+    - **선택예약** 버튼을 통해 최대 5개의 상품까지 한 번에 예약 및 결제가 가능합니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L447)
 
 </div>
 </details>
