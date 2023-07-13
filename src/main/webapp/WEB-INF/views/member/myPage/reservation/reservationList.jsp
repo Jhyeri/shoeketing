@@ -231,7 +231,55 @@ $(document).ready(function() {
 	 $("input[name='color']").on("click", function(e) { //색상 후기 선택 시
 		 color = $.trim($(this).next("span").text());
 	 });
-	
+	 
+	 function checkReviewExists(goodsNum) { //리뷰 등록 전에 리뷰 작성 이력을 검사
+			var jsonGoodsNum = {TOTAL_GOODS_NUM:goodsNum};
+		
+			$.ajax({
+				type : 'post',
+				url : '/sk/myPage/checkReviewExists',
+				contentType:"application/json; charset=UTF-8",
+				data:JSON.stringify(jsonGoodsNum),
+				 success : function(data){
+					 if(data > 0) { //리뷰가 존재하면
+						 alert("이미 리뷰를 작성한 상품입니다!");
+					 } else {
+						 $('#reviewModal').modal('show'); //모달창 열기
+					 }
+				},
+				error : function(){
+					alert("잠시 후 다시 시도해주세요.");
+				}
+			});
+		}
+		
+		function writeReview(goodsNum, star, size, comfort, color) { //리뷰 등록 처리
+			var formData = new FormData();
+			formData.append("TOTAL_GOODS_NUM", goodsNum);
+			formData.append("REVIEW_SCORE", star);
+			formData.append("REVIEW_SIZE", size);
+			formData.append("REVIEW_COMFORT", comfort);
+			formData.append("REVIEW_COLOR", color);
+			
+			
+			if(confirm("리뷰를 등록하시겠습니까?")) {
+				$.ajax({
+				type : 'post',
+				url : '/sk/myPage/reviewWrite',
+				data : formData,
+				processData : false,
+				contentType : false,
+				 success : function(data){
+					 alert("리뷰가 등록되었습니다.");
+					 location.reload();
+				},
+				error : function(){
+					alert("잠시 후 다시 시도해주세요.");
+				}
+			});
+			}
+		}
+		
 	function fn_reservationDelete(reservationNum, reservationStatus){
 		
 		var formData = new FormData();
@@ -267,53 +315,7 @@ $(document).ready(function() {
 		}
 	}
 	
-	function checkReviewExists(goodsNum) { //리뷰 등록 전에 리뷰 작성 이력을 검사
-		var jsonGoodsNum = {TOTAL_GOODS_NUM:goodsNum};
 	
-		$.ajax({
-			type : 'post',
-			url : '/sk/myPage/checkReviewExists',
-			contentType:"application/json; charset=UTF-8",
-			data:JSON.stringify(jsonGoodsNum),
-			 success : function(data){
-				 if(data > 0) { //리뷰가 존재하면
-					 alert("이미 리뷰를 작성한 상품입니다!");
-				 } else {
-					 $('#reviewModal').modal('show'); //모달창 열기
-				 }
-			},
-			error : function(){
-				alert("잠시 후 다시 시도해주세요.");
-			}
-		});
-	}
-	
-	function writeReview(goodsNum, star, size, comfort, color) { //리뷰 등록 처리
-		var formData = new FormData();
-		formData.append("TOTAL_GOODS_NUM", goodsNum);
-		formData.append("REVIEW_SCORE", star);
-		formData.append("REVIEW_SIZE", size);
-		formData.append("REVIEW_COMFORT", comfort);
-		formData.append("REVIEW_COLOR", color);
-		
-		
-		if(confirm("리뷰를 등록하시겠습니까?")) {
-			$.ajax({
-			type : 'post',
-			url : '/sk/myPage/reviewWrite',
-			data : formData,
-			processData : false,
-			contentType : false,
-			 success : function(data){
-				 alert("리뷰가 등록되었습니다.");
-				 location.reload();
-			},
-			error : function(){
-				alert("잠시 후 다시 시도해주세요.");
-			}
-		});
-		}
-	}
 });
 
 //페이징 함수
