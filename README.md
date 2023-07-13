@@ -232,6 +232,7 @@
   
   - **리뷰 등록**
     - ajax 요청을 통해 리뷰를 등록 처리 합니다.
+  
 <details>
 <summary><b>📌 코드 확인</b></summary>
 <div markdown="1">
@@ -241,6 +242,7 @@
 
 </div>
 </details>
+
 <br/>
 
 ### 5.5. 장바구니
