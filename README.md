@@ -74,7 +74,8 @@
   - 상품 픽업 날짜를 지정하고 토스페이먼츠로 예약금 결제 기능을 제공합니다.
   - **날짜 지정** :pushpin: [JSP코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/SK/src/main/webapp/WEB-INF/views/goods/search/stockSearchForm.jsp)
   - **토스페이먼츠 결제** :pushpin: [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/SK/src/main/java/sk/item/controller/TossPaymentsController.java)
-  
+<br/>
+
 #### 4.3. 장바구니에서 픽업예약 
   - 장바구니에서 상품별로 빠르게 픽업예약을 진행할 수 있습니다.
     <details>
@@ -85,7 +86,7 @@
     - [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/SK/src/main/java/sk/item/controller/BasketController.java)
     </div>
     </details>
-
+<br/>
 
 ### [매장회원]
 
@@ -102,7 +103,7 @@
 
     </div>
     </details>
- 
+<br/>
 
 #### 4.5. 요청 픽업예약 관리
   - 매장에 요청된 픽업 예약을 승인/거부/취소가 가능합니다.
@@ -116,7 +117,7 @@
 
     </div>
     </details>
-
+<br/>
 
 ### [브랜드회원]
   
@@ -133,7 +134,7 @@
 
     </div>
     </details>
- 
+<br/> 
  
 #### 4.7. 매장 입점 요청 관리
 - 브랜드 지점을 해당 사이트에 등록/삭제할 수 있습니다.
@@ -148,12 +149,12 @@
 )
     </div>
     </details>
- 
+<br/> 
 </div>
 </details>
 
-</div>
-</details>
+<!-- </div>
+</details> -->
 
 </br>
 
