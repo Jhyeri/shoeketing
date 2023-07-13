@@ -180,22 +180,25 @@
     - 비밀번호가 일치하면 회원의 삭제여부를 'Y'로 변경하여 탈퇴처리합니다. 📌 [코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L148)
   
 ### 5.2. 찜 목록
-  - **찜 목록** 📌[코드 확인]()
+  - **찜 목록** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp)
   
-  - **찜 취소** 📌[코드 확인]()
+  - **찜 취소** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp#L62)
     - 상품의 썸네일을 클릭하면 찜 목록에서 삭제할 수 있습니다.
   
 ### 5.3. 문의내역
-  - **나의 문의 내역 조회** 📌[코드 확인]()
-  - **문의글 상세보기** 📌[코드 확인]()
+  - **나의 문의 내역 조회** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csList.jsp)
+  - **문의글 상세보기** 
+    - 문의내역에서 함수를 호출하여 모달창으로 상세보기가 가능합니다.
   - **문의 작성**
-    - 문의할 매장 찾기 📌[코드 확인]()
-    - 글 등록하기 📌[코드 확인]()
-    - 글 삭제하기 📌[코드 확인]()
+    - 문의할 매장 찾기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L161)
+      - **문의할 매장을 직접 지정**할 수 있습니다.
+      - ajax요청을 통해 모든 매장을 조회할 수 있으며, 검색 또한 가능합니다.
+    - 글 등록하기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L192)
+    - 글 삭제하기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L132)
   
 ### 5.4. 픽업 예약 목록
-  - **나의 예약 목록 조회** 📌[코드 확인]()
-  - **예약내역 상세보기** 📌[코드 확인]()
+  - **나의 예약 목록 조회** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/reservation/reservationList.jsp)
+  - **예약내역 상세보기** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/reservation/reservationDetail.jsp)
   - **리뷰 작성**
     - 1회만 작성 가능하므로, 후기 등록 전에 리뷰 작성여부를 체크합니다. 📌[코드 확인]()
     - 리뷰를 등록 처리 합니다. 📌[코드 확인]()
