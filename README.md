@@ -347,7 +347,7 @@
 <summary>Ajax 사용 중 data 접근 오류</summary>
 <div markdown="1">
   
- - Controller에서 리턴한 Map형태의 데이터에 접근하고자 함
+ - Controller에서 리턴한 Map타입의 값에 접근하고자 함
    - 그러나 JSP에서 데이터를 찾을 수 없었음
     <details>
     <summary>📌기존코드 펼치기</summary>
@@ -356,7 +356,7 @@
     </div>
     </details>
 - **해결방법**
-  - Controller에서 "result"라는 이름으로 리턴하였기 때문에 
+  - Controller에서 "result"라는 이름으로 값을 리턴하였기 때문에 
   - **"data.result"로 수정하여 해결**
      <details>
     <summary>📌개선된 코드 펼치기</summary>
