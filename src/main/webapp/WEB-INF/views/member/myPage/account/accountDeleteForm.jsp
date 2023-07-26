@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-</head>
+</head> 
 <body>
         <div class="col-10" style="margin-top: 0px;">
             <h3 style="margin-left: 30px; color: black; font-weight: bolder;">회원 탈퇴</h3>
@@ -75,7 +75,7 @@ $(document).ready(function() {
 					alert("비밀번호가 일치하지 않습니다.");
 				} else if(data.result == "deleteFail") {
 					alert("진행중인 거래가 존재하므로 탈퇴하실 수 없습니다.");
-				}
+				} 
 			},
 			error:function() {
 				alert("잠시 후 다시 시도해주세요.");

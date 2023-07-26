@@ -162,7 +162,7 @@ public class CSController {
 	public ModelAndView csDetail(@RequestBody Map<String, Object> map) throws Exception {
 		log.debug("###### 문의 상세보기 ######");
 		ModelAndView mv = new ModelAndView("jsonView");
-		
+		  
 		System.out.println("csDetail map : " + map);
 		//글내용 가져오기
 		Map<String, Object> resultMap = csService.selectCSDetail(map);
