@@ -59,7 +59,7 @@ $(document).ready(function() {
 	
 	function fn_checkPw() { //비밀번호 확인 함수 
 		var inputPw = $("#MEM_PW").val();
-		var jsonPw = {"MEM_PW":inputPw};
+		var jsonPw = {"MEM_PW":inputPw}; 
 		
 		$.ajax({
 			url:"/sk/myPage/accountDeleteForm",

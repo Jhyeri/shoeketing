@@ -44,7 +44,7 @@ public class MemberPageController {
 		ModelAndView mv = new ModelAndView("myPageMain");
 		
 		return mv;
-	}
+	} 
 	
 	//회원정보 수정 폼
 	@RequestMapping(value="/myPage/accountModifyForm")

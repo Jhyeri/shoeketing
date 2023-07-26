@@ -201,7 +201,7 @@ $(document).ready(function() {
 		 var title = $("input[name='title']").val();
 		    var content = $("textarea").val();
 
-		    // 제목이나 내용이 비어있는지 확인
+		    // 제목이나 내용이 비어있는지 확인 
 		    if (title.trim() === '') {
 		        alert('제목을 입력해주세요.');
 		        return;
