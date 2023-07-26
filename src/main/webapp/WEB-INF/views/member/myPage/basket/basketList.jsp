@@ -94,6 +94,7 @@ function fn_paymentone(name, model, shopName, size, num, shopNum, date) { //개�
 	}
 	
 	let orderId = Number(max) + 124; //새로운 주문번호 생성
+	console.log("orderId : " + orderId);
 	
 	var goodsNum = num;
 	var goodsName = name;

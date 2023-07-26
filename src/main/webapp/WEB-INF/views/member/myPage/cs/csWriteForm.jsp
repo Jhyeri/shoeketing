@@ -119,6 +119,13 @@ $(document).ready(function() {
 		 findShop();
 	});
 	
+	$("button[name='register']").on("click", function(e) { //매장이름 검색 시
+		 e.preventDefault();
+		 fn_register();
+	});
+	
+	
+	
 	//유효성 검사
 	 (() => {
 	 	  'use strict'
@@ -206,8 +213,8 @@ $(document).ready(function() {
 		    }
 
 		    // 입력한 제목과 내용이 유효한지 확인
-		    var titleRegex = /^[a-zA-Z0-9ㄱ-ㅎ가-힣\s]{2,100}$/; // 제목은 영문,숫자,한글,공백 1~100자
-		    var contentRegex = /^[a-zA-Z0-9ㄱ-ㅎ가-힣\s]{2,500}$/; // 내용은 영문,숫자,한글,공백 1~500자
+		    var titleRegex = /^[a-zA-Z0-9ㄱ-ㅎ가-힣\s\*\^\&\!\?\.\~]{2,100}$/; // 제목은 영문,숫자,한글,공백 1~100자
+		    var contentRegex = /^[a-zA-Z0-9ㄱ-ㅎ가-힣\s\*\^\&\!\?\.\~]{2,500}$/; // 내용은 영문,숫자,한글,공백 1~500자
 		    
 		    if (!titleRegex.test(title)) {
 		        alert('제목은 영문,숫자,한글,공백 2~100자로 입력해주세요.');
@@ -225,8 +232,6 @@ $(document).ready(function() {
 		        alert('매장을 선택해주세요.');
 		        return;
 		    }
-
-		 
 		 
 		var formData = new FormData();
 		formData.append("CS_TITLE", $("input[name='title']").val());

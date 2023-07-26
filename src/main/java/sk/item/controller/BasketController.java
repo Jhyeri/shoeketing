@@ -39,7 +39,7 @@ public class BasketController {
 
 		List<Map<String, Object>> list = basketService.selectBasketList(map);
 		long orderId = basketService.selectOrderId(map);
-
+		
 		mv.addObject("list", list);
 		mv.addObject("orderId", orderId);
 		return mv;

@@ -108,7 +108,7 @@ public class MemberPageController {
 		String pw ="";
 		int count = 0;
 		Map<String, Object> result = new HashMap<>();
-		map.put("MEM_EMAIL", (String)session.getAttribute("session_MEM_EMAIL"));
+		map.put("MEM_EMAIL", (String)session.getAttribute("session_MEM_ID"));
 		
 			//DB에서 비밀번호 꺼내오기
 			dbPw = String.valueOf(memberPageService.pwCheck(map).get("MEM_PW"));
