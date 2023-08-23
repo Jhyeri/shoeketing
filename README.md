@@ -37,7 +37,7 @@
   - JavaMail API
   - RESTful API(JSON)
   - 사업자 등록번호 API
-  - JavaMail API
+  - JavaMail 라이브러리
 
 #### `IDE`
   - Spring Tool Suite 3
