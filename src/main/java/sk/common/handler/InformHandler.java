@@ -41,7 +41,7 @@ public class InformHandler extends TextWebSocketHandler {
 //				WebSocketSession targetSession = users.get("나이키 홍대점"); // 임시 삭제
 
 				// 실시간 접속시
-				if (targetSession != null) {
+				if (targetSession != null) { //메세지를 받을 세션이 null이 아니면
 					// ex: [&분의일] 신청이 들어왔습니다.
 					TextMessage tmpMsg = new TextMessage(
 							"<a href='" + url + "'>[<b>" + type + "</b>] " + content + "</a>");

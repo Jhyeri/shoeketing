@@ -122,6 +122,8 @@ $(document).ready(function(){
 					$("#csReplyStatus_"+csReplyNum).empty();
 					$("#csReplyStatus_"+csReplyNum).append("답변 완료");
 					
+					//소켓에 전달되는 메시지
+					//InformHandler에서 ,를 구분자로 분리시킴
 					socket.send("<%=session.getAttribute("session_SHOP_NAME")%>,"+csWriter+",문의하신 글에 답변이 달렸습니다.,/sk/myPage/csList");	
 					
 				}else if(data.result == "fail"){
