@@ -23,7 +23,6 @@
   - CSS3
   - JavaScript
   - Ajax
-  - jQuery
   - bootstrap
 
 #### `WAS`
@@ -32,12 +31,12 @@
 #### `API & 라이브러리`
   - 카카오 Maps API
   - 토스페이먼츠 API
-  - 웹소켓
+  - 웹 소켓
   - SOLAPI 문자 인증
-  - JavaMail API
   - RESTful API(JSON)
-  - 사업자 등록번호 API
+  - 국세청 사업자등록정보진위확인 API
   - JavaMail 라이브러리
+  - jQuery
 
 #### `IDE`
   - Spring Tool Suite 3
@@ -159,13 +158,15 @@
 </br>
 
 ## 5. 담당한 부분
- - 재고찾기 기능 (카카오MAPS API)
- - 장바구니
- - 픽업예약 및 간편결제 (토스페이먼츠 API)
- - 픽업 예약 목록 + 리뷰 등록
- - 문의 게시판 (문의글/답변 삭제 로직 트리거 작성)
- - 일반회원 마이페이지
+ - 일반회원 정보 수정/탈퇴
  - 찜 목록
+ - 문의 게시판
+ - 실시간 알림 (웹 소켓)
+ - 픽업 예약 목록 + 리뷰 등록
+ - 장바구니 목록
+ - 픽업예약 및 간편결제 (토스페이먼츠 API)
+
+
    
 <details>
 <summary><b>담당 기능 설명 펼치기</b></summary>
@@ -217,16 +218,28 @@
   - **나의 문의 내역 조회** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/cs/controller/CSController.java#L49)
 
   - **문의글 상세보기** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/cs/controller/CSController.java#L162)
-    - 문의내역에서 함수를 호출하여 모달창으로 상세보기가 가능합니다.
+    - 문의내역에서 함수를 호출하여 모달창을 띄웁니다.
 
   - **문의 작성**
     - 문의할 매장 찾기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L161)
       - **문의할 매장을 직접 지정**할 수 있습니다.
-      - ajax요청을 통해 모든 매장을 조회할 수 있으며, 검색 또한 가능합니다.
+      - ajax요청으로 모든 매장을 검색 가능합니다.
     - 글 등록하기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L192)
     - 글 삭제하기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L132)
-  
-### 5.4. 리뷰 등록
+<br/>
+
+### 5.4. 실시간 알림
+  - **웹 소켓 설정** 📌[코드 확인](inform 핸들러)
+    - 클라이언트가 서버로 연결 시, 로그인 중인 개별 유저를 저장합니다.
+    - 클라이언트가 데이터 전송 시, 특정 유저에게 알림을 전송처리 합니다.
+
+  - **웹 소켓 연결** 📌[코드 확인]()
+    - 모든 페이지에서 공통으로 사용하는 페이지인 header.jsp에 웹 소켓을 연결합니다.
+
+  - **알림 메시지 전송** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L161)
+
+
+### 5.5. 리뷰 등록
   - **리뷰 작성 이력 확인**
     - 1회만 작성 가능하므로, 후기 등록 전에 리뷰 작성여부를 체크합니다.
   
@@ -245,15 +258,15 @@
 
 <br/>
 
-### 5.5. 장바구니
+### 5.6. 장바구니
   - **장바구니 목록 조회** 📌[코드 확인]()
   - **상품 삭제**
-    - 하나의 상품만 삭제하거나, 여러개의 상품을 삭제하는 전체삭제 기능도 제공합니다.📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L10)
+    - 개별삭제와 일괄삭제가 가능합니다.📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L10)
     
   - **픽업예약**
-    - 상품별로 원하는 날짜를 지정하여 픽업예약 및 토스페이먼츠 결제를 진행할 수 있습니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/TossPaymentsController.java)
-    - **픽업예약** 버튼을 통해 하나의 상품만 예약 가능합니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L48)
-    - **선택예약** 버튼을 통해 최대 5개의 상품까지 한 번에 예약 및 결제가 가능합니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L447)
+    - 상품별로 원하는 날짜를 지정하여 픽업예약 및 토스 간편결제를 진행할 수 있습니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/TossPaymentsController.java)
+    - **픽업예약** 버튼을 통해 해당 상품을 예약 가능합니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L48)
+    - **선택예약** 버튼을 통해 최대 5개의 상품을 일괄예약 및 결제가 가능합니다. 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L447)
 
 </div>
 </details>
