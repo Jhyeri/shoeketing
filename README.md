@@ -67,11 +67,13 @@
     - 카카오 Maps API를 통해 매장 위치를 조회할 수 있습니다.
   - **재고 수량 조회** :pushpin: [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/StockController.java)
     - 브랜드/상품명/사이즈/매장별로 신발 재고 수량을 조회할 수 있습니다. :pushpin: [Service 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/service/StockServiceImpl.java)
+<br/>
 
 #### 4.2. 토스페이먼츠 결제
   - 상품 픽업 날짜를 지정하고 토스페이먼츠로 예약금 결제 기능을 제공합니다.
   - **날짜 지정** :pushpin: [JSP코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/SK/src/main/webapp/WEB-INF/views/goods/search/stockSearchForm.jsp)
   - **토스페이먼츠 결제** :pushpin: [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/SK/src/main/java/sk/item/controller/TossPaymentsController.java)
+<br/>
 
 #### 4.3. 장바구니에서 픽업예약 
   - 장바구니에서 상품별로 빠르게 픽업예약을 진행할 수 있습니다.
