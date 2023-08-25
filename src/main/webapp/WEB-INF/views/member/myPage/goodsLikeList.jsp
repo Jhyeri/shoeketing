@@ -60,7 +60,6 @@ $(document).ready(function() {
 		});
 
 		function fn_unlike(goodsNum) { //찜 취소 처리
-			//이 함수를 호출할 버튼이 필요함. 임시로 이미지 a태그에 넣어서 구현해봄
 			
 			if(confirm("해당 상품을 찜 목록에서 삭제하시겠습니까?")) {
 				$.ajax({
