@@ -204,14 +204,14 @@
   - **찜 취소**
     - ajax 요청을 통해 상품의 썸네일 이미지를 클릭하면 찜 목록에서 삭제할 수 있습니다.<br/>
     <details>
-    <summary><b>📌 코드 확인</b></summary>
-    <div markdown="1">
+      <summary><b>📌 코드 확인</b></summary>
+      <div markdown="1">
+    
+      - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp#L62)
+      - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L163)
   
-    - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp#L62)
-    - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L163)
-
-    </div>
-    </details> 
+      </div>
+      </details> 
 
 
 ### 5.3. 문의내역
