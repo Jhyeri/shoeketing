@@ -203,7 +203,7 @@
     
   - **찜 취소**
     - ajax 요청을 통해 상품의 썸네일 이미지를 클릭하면 찜 목록에서 삭제할 수 있습니다.<br/>
-    <details>
+      <details>
       <summary><b>📌 코드 확인</b></summary>
       <div markdown="1">
     
