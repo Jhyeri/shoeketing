@@ -226,7 +226,9 @@
       - **문의할 매장을 직접 지정**할 수 있습니다.
       - ajax요청으로 모든 매장을 검색 가능합니다.
     - 글 등록하기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L192)
-    - 글 삭제하기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L132)<br/>
+    - 글 삭제하기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L132)
+
+<br/>
 
 ### 5.4. 실시간 알림
   - **웹 소켓 설정** 📌[코드 확인](inform 핸들러)
@@ -237,7 +239,8 @@
     - 모든 페이지에서 공통으로 사용하는 페이지인 header.jsp에 웹 소켓을 연결합니다.
 
   - **알림 메시지 전송** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L161)
-  <br/>
+
+<br/>
 
 ### 5.5. 리뷰 등록
   - **리뷰 작성 이력 확인**
@@ -255,7 +258,7 @@
     
     </div>
     </details>
-    <br/>
+<br/>
 
 ### 5.6. 장바구니
   - **장바구니 목록 조회** 📌[코드 확인]()
