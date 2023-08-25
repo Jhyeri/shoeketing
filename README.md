@@ -212,7 +212,7 @@
   
       </div>
       </details> 
-
+<br/>
 
 ### 5.3. 문의내역
   - **나의 문의 내역 조회** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/cs/controller/CSController.java#L49)
@@ -226,6 +226,7 @@
       - ajax요청으로 모든 매장을 검색 가능합니다.
     - 글 등록하기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L192)
     - 글 삭제하기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L132)
+<br/>
 
 ### 5.4. 실시간 알림
   - **웹 소켓 설정** 📌[코드 확인](inform 핸들러)
@@ -236,7 +237,7 @@
     - 모든 페이지에서 공통으로 사용하는 페이지인 header.jsp에 웹 소켓을 연결합니다.
 
   - **알림 메시지 전송** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L161)
-
+<br/>
 
 ### 5.5. 리뷰 등록
   - **리뷰 작성 이력 확인**
@@ -245,15 +246,15 @@
   - **리뷰 등록**
     - ajax 요청을 통해 리뷰를 등록 처리 합니다.
   
-<details>
-<summary><b>📌 코드 확인</b></summary>
-<div markdown="1">
-
-- [JSP 코드 확인하기](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/reservation/reservationList.jsp)
-- [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/review/controller/ReviewController.java)
-
-</div>
-</details>
+    <details>
+    <summary><b>📌 코드 확인</b></summary>
+    <div markdown="1">
+    
+    - [JSP 코드 확인하기](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/reservation/reservationList.jsp)
+    - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/review/controller/ReviewController.java)
+    
+    </div>
+    </details>
 
 <br/>
 
