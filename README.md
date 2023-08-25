@@ -189,17 +189,17 @@
 
 ### 5.2. 찜 목록
   - **찜 목록**
-    - 찜한 상품을 조회할 수 있습니다.<br/>
+    - 찜한 상품을 조회할 수 있습니다.<br/><br/>
   
-    <details>
-    <summary><b>📌 코드 확인</b></summary>
-    <div markdown="1">
-  
-    - [JSP 코드 확인하기](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp)
-    - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java)
-
-    </div>
-    </details>
+      <details>
+      <summary><b>📌 코드 확인</b></summary>
+      <div markdown="1">
+    
+      - [JSP 코드 확인하기](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp)
+      - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java)
+    
+      </div>
+      </details>
     
   - **찜 취소**
     - ajax 요청을 통해 상품의 썸네일 이미지를 클릭하면 찜 목록에서 삭제할 수 있습니다.<br/>
