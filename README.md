@@ -249,15 +249,15 @@
   - **리뷰 등록**
     - ajax 요청을 통해 리뷰를 등록 처리 합니다.
   
-    <details>
-    <summary><b>📌 코드 확인</b></summary>
-    <div markdown="1">
-    
-    - [JSP 코드 확인하기](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/reservation/reservationList.jsp)
-    - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/review/controller/ReviewController.java)
-    
-    </div>
-    </details>
+      <details>
+      <summary><b>📌 코드 확인</b></summary>
+      <div markdown="1">
+      
+      - [JSP 코드 확인하기](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/reservation/reservationList.jsp)
+      - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/review/controller/ReviewController.java)
+      
+      </div>
+      </details>
 <br/>
 
 ### 5.6. 장바구니
