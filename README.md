@@ -184,8 +184,8 @@
     </div>
     </details>
   - **회원탈퇴**
-    - 탈퇴 전, 비밀번호와 회원의 탈퇴가능여부를 확인합니다. 📌 [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L109)
-    - 비밀번호가 일치하면 회원의 삭제여부를 'Y'로 변경하여 탈퇴처리합니다. 📌 [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L148)
+    - 탈퇴 전, 비밀번호와 회원의 탈퇴가능여부를 확인합니다. 📌 [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L105)
+    - 비밀번호가 일치하면 회원의 삭제여부를 'Y'로 변경하여 탈퇴처리합니다. 📌 [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L144)
 <br/>
 
 ### 5.2. 찜 목록
@@ -209,7 +209,7 @@
       <div markdown="1">
     
       - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/goodsLikeList.jsp#L62)
-      - [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L163)
+      - [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/myPage/controller/MemberPageController.java#L195)
   
       </div>
       </details> 
@@ -221,24 +221,18 @@
   - **문의글 상세보기** 📌[Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/cs/controller/CSController.java#L162)
     - 문의내역에서 함수를 호출하여 모달창을 띄웁니다.
 
-  - **문의 작성**
-    - 문의할 매장 찾기 📌[JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L161)
-      - **문의할 매장을 직접 지정**할 수 있습니다.
-      - ajax요청으로 모든 매장을 검색 가능합니다.
-    - 글 등록하기 📌[JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L192)
-    - 글 삭제하기 📌[JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L132)
-
+  - **문의 작성** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/cs/controller/CSController.java) 
 <br/>
 
 ### 5.4. 실시간 알림
-  - **웹 소켓 설정** 📌[Handler 코드 확인]()
+  - **웹 소켓 설정** 📌[Handler 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/common/handler/InformHandler.java)
     - 클라이언트가 서버로 연결 시, 로그인 중인 개별 유저를 저장합니다.
     - 클라이언트가 데이터 전송 시, 특정 유저에게 알림을 전송처리 합니다.
 
-  - **웹 소켓 연결** 📌[JSP 코드 확인]()
+  - **웹 소켓 연결** 📌[JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/layout/header.jsp)
     - 모든 페이지에서 공통으로 사용하는 페이지인 header.jsp에 웹 소켓을 연결합니다.
 
-  - **알림 메시지 전송** 📌[JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L161)
+  - **알림 메시지 전송** 📌[JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/shop/shopPage/cs/csList.jsp#L127)
 
 <br/>
 
@@ -253,7 +247,7 @@
       <summary><b>📌 코드 확인</b></summary>
       <div markdown="1">
       
-      - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/reservation/reservationList.jsp)
+      - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/reservation/reservationList.jsp#L235)
       - [Controller코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/review/controller/ReviewController.java)
       
       </div>
@@ -261,23 +255,13 @@
 <br/>
 
 ### 5.6. 장바구니
-  - **장바구니 목록 조회** 📌[JSP 코드 확인]()
-  - **상품 삭제**
-    - 개별삭제와 일괄삭제가 가능합니다.📌[JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L10)
-    
-  - **픽업예약**
-    - 상품별로 원하는 날짜를 지정하여 픽업예약 및 토스 간편결제를 진행할 수 있습니다. 📌[Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/TossPaymentsController.java)
-    - **픽업예약** 버튼을 통해 해당 상품을 예약 가능합니다. 📌[JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L48)
-    - **선택예약** 버튼을 통해 최대 5개의 상품을 일괄예약 및 결제가 가능합니다. 
-      <details>
-      <summary><b>📌 코드 확인</b></summary>
-      <div markdown="1">
-      
-      - [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L447)
-      - [Controller코드 확인](토스컨트롤러)
-      
-      </div>
-      </details>
+  - **장바구니 목록 조회** 📌[Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/BasketController.java#L68)
+  - **상품 삭제** 📌[Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/BasketController.java#L68)
+  - **픽업예약** 📌[Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/TossPaymentsController.java)
+    - 상품별로 원하는 날짜를 지정하여 픽업예약 및 토스 간편결제를 진행할 수 있습니다. 
+    - **픽업예약** 버튼을 통해 해당 상품을 예약 가능합니다. 📌[JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L85)
+    - **선택예약** 버튼을 통해 최대 5개의 상품을 일괄예약 및 결제가 가능합니다. 📌[JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/basket/basketList.jsp#L570)
+  
 </div>
 </details>
 
