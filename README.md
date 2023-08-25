@@ -212,7 +212,7 @@
 
     </div>
     </details> 
-<br/>
+
 
 ### 5.3. 문의내역
   - **나의 문의 내역 조회** 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/cs/controller/CSController.java#L49)
@@ -226,7 +226,6 @@
       - ajax요청으로 모든 매장을 검색 가능합니다.
     - 글 등록하기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L192)
     - 글 삭제하기 📌[코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/member/myPage/cs/csWriteForm.jsp#L132)
-<br/>
 
 ### 5.4. 실시간 알림
   - **웹 소켓 설정** 📌[코드 확인](inform 핸들러)
