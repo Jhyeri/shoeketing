@@ -60,22 +60,22 @@
 <summary><b> 핵심기능 설명 펼치기</b></summary>
 <div markdown="1">
   
-### [일반회원]
+## [일반회원]
   
-#### 4.1. 신발 재고 수량 및 매장 위치 확인
+### 4.1. 신발 재고 수량 및 매장 위치 확인
   - **매장 위치 조회** :pushpin: [JSP 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/webapp/WEB-INF/views/goods/search/stockSearchForm.jsp)
     - 카카오 Maps API를 통해 매장 위치를 조회할 수 있습니다.
   - **재고 수량 조회** :pushpin: [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/controller/StockController.java)
     - 브랜드/상품명/사이즈/매장별로 신발 재고 수량을 조회할 수 있습니다. :pushpin: [Service 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/src/main/java/sk/item/service/StockServiceImpl.java)
 <br/>
 
-#### 4.2. 토스페이먼츠 결제
+### 4.2. 토스페이먼츠 결제
   - 상품 픽업 날짜를 지정하고 토스페이먼츠 API로 예약금 결제 기능을 제공합니다.
   - **날짜 지정** :pushpin: [JSP코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/SK/src/main/webapp/WEB-INF/views/goods/search/stockSearchForm.jsp)
   - **토스페이먼츠 결제** :pushpin: [Controller 코드 확인](https://github.com/Jhyeri/shoeketing/blob/main/SK/src/main/java/sk/item/controller/TossPaymentsController.java)
 <br/>
 
-#### 4.3. 장바구니에서 픽업예약 
+### 4.3. 장바구니에서 픽업예약 
   - 장바구니에서 상품별로 빠르게 픽업예약을 진행할 수 있습니다.
     <details>
     <summary><b>📌 코드 확인</b></summary>
@@ -87,9 +87,9 @@
     </details>
 <br/>
 
-### [매장회원]
+## [매장회원]
 
-#### 4.4. 재고 수량 관리
+### 4.4. 재고 수량 관리
   - 매장에서 보유하고 있는 상품의 재고 수량을 관리할 수 있습니다.
 
     <details>
@@ -104,7 +104,7 @@
     </details>
 <br/>
 
-#### 4.5. 요청 픽업예약 관리
+### 4.5. 요청 픽업예약 관리
   - 매장에 요청된 픽업 예약을 승인/거부/취소가 가능합니다.
      <details>
     <summary><b>📌 코드 확인</b></summary>
@@ -118,9 +118,9 @@
     </details>
 <br/>
 
-### [브랜드회원]
+## [브랜드회원]
   
-#### 4.6. 상품 등록 및 수정, 삭제
+### 4.6. 상품 등록 및 수정, 삭제
 - 해당 브랜드의 상품을 등록/수정/삭제할 수 있습니다.
      <details>
     <summary><b>📌 코드 확인</b></summary>
@@ -135,7 +135,7 @@
     </details>
 <br/> 
  
-#### 4.7. 매장 입점 요청 관리
+### 4.7. 매장 입점 요청 관리
 - 브랜드 지점을 해당 사이트에 등록/삭제할 수 있습니다.
 
     <details>
