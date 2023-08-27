@@ -44,7 +44,7 @@
 </br>
 
 ## 3. ERD 설계
- <img width="60%" src="https://github.com/Jhyeri/shoeketingtmp/assets/111175466/20769571-5bb0-4b1a-840d-ffad19ca6be6"/>
+ <img width="70%" src="https://github.com/Jhyeri/shoeketing/assets/111175466/50cc572f-5119-4b53-b21b-4a08b9ade715"/>
 
 ## 4. 프로젝트의 핵심 기능  
   - **일반회원**
