@@ -296,8 +296,9 @@
 
 아래 링크를 통해 더 많은 트러블 슈팅을 확인하실 수 있습니다.<br/><br/>
 [**📌 트러블 슈팅 모음**](https://snow-lifter-a27.notion.site/Study-d28c1ad8ca5d46d59d75339bc0b989da?pvs=4)
+<br/>
 
-<details>
+<!-- <details>
 <summary>Ajax함수 success 함수 동작 오류</summary>
 <div markdown="1">
 
@@ -378,4 +379,4 @@
    
 </div>
 </details>    
-
+-->
